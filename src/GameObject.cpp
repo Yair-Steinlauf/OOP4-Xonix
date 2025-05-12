@@ -11,3 +11,13 @@ void GameObject::draw(sf::RenderWindow* window)
 	window->draw(m_rect);
 
 }
+
+bool GameObject::contains(const sf::Vector2f& otherPos)
+{
+	return m_rect.getGlobalBounds().contains(otherPos);
+}
+
+sf::Vector2f GameObject::getPos() const
+{
+	return m_rect.getPosition();
+}
