@@ -6,3 +6,8 @@ Enemy::Enemy(sf::Vector2i startPos)
 {
 
 }
+
+void Enemy::changeDirection()
+{
+	//TODO: change direction algo
+}

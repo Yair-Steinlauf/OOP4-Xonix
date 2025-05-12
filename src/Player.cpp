@@ -7,3 +7,23 @@ Player::Player(sf::Vector2i startPos) : MovingObject(startPos, PLAYER_SPEED), m_
 	m_rect.setOutlineColor(sf::Color::Red);
 	m_rect.setOutlineThickness(0.01);
 }
+
+void Player::fail()
+{
+	//TODO: fail stuff
+}
+
+bool Player::isOccupying() const
+{
+	return m_isOccupying;
+}
+
+void Player::startOccuping()
+{
+	m_isOccupying = true;
+}
+
+void Player::stopOccuping()
+{
+	m_isOccupying = false;
+}
