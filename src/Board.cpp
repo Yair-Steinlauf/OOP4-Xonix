@@ -1,3 +1,4 @@
+
 #include "Board.h"
 
 
@@ -113,4 +114,3 @@ void Board::initBoard(int xSize, int ySize)
         }
     }
 }
-
