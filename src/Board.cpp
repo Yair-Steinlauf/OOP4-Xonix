@@ -43,6 +43,9 @@ void Board::handelCollison()
             handleEnemyCollison(pixelPos, row, col);
         }
     }
+    for (const auto& enemy : m_enemys) {
+        //if (enemy.get()->intersect(m_player.get())); TODO: enemy vs player collision
+    }
 }
 
 void Board::handleEnemyCollison(sf::Vector2f& pixelPos, size_t row, size_t col)

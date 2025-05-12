@@ -14,6 +14,7 @@ public:
 	GameObject(sf::Vector2i pos);
 	void draw(sf::RenderWindow* window);
 	bool contains(const sf::Vector2f& otherPos);
+	bool intersect(GameObject& other);
 	sf::Vector2f getPos() const;
 	virtual void update(sf::Time time) {};
 	virtual void collide(GameObject& other) = 0;

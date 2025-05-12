@@ -17,6 +17,11 @@ bool GameObject::contains(const sf::Vector2f& otherPos)
 	return m_rect.getGlobalBounds().contains(otherPos);
 }
 
+bool GameObject::intersect(GameObject& other)
+{
+	return m_rect.getGlobalBounds().intersects(other.m_rect.getGlobalBounds());
+}
+
 sf::Vector2f GameObject::getPos() const
 {
 	return m_rect.getPosition();
