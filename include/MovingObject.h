@@ -1,7 +1,7 @@
 #include "GameObject.h"
 
 
-const sf::Vector2f MovingObjectDimension(25, 25);
+static const sf::Vector2f MovingObjectDimension(25, 25);
 
 class MovingObject : public GameObject {
 public:

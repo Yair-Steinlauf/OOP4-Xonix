@@ -3,7 +3,9 @@
 #include "Board.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "ResourceManager.h"
 #include <vector>
+#include <memory>
 
 
 class Engine{
@@ -15,8 +17,9 @@ private:
 	sf::RenderWindow m_window;
 	sf::Event m_event;
 	Board m_board;
-	Player m_player;
+	std::shared_ptr<Player> m_player;
 	std::vector<Enemy> m_enemys;
+	ResourceManager m_resourceManager;
 	bool isGameOver	= false;
 	void processEvents();
 	void update();
