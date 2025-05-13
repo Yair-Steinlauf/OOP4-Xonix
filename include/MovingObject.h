@@ -2,16 +2,18 @@
 #include "GameObject.h"
 
 const int OutlineThickness = 3;
-const sf::Vector2f MovingObjectDimension(25, 25);
 
 class MovingObject : public GameObject {
 public:
-	MovingObject(sf::Vector2i position, int speed = 0);
+	MovingObject(sf::Vector2i position, int speed = 0, int pixelSizeX = 16, int pixelSizeY = 16, sf::Vector2i direction = sf::Vector2i(1,1));
 	//void collide(BoundPixel& other) override;
 	void setDirection(const sf::Vector2i& direction);
-	void update(sf::Time time) override;
+	virtual void update(sf::Time time) override;
+	sf::Vector2i getNextPosGrid() const;
+	sf::Vector2i getPosGrid() const;
 
 protected:
 	sf::Vector2i m_direction;
-	int m_speed = 0;
+	int m_speed = 0;	// TODO: maybe delete
+	sf::Time m_moveTimer = sf::microseconds(0);
 };

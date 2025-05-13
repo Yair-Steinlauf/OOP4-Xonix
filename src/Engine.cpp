@@ -1,15 +1,19 @@
 #include "Engine.h"
+#include "Types.h"
 #include <iostream>
 
 Engine::Engine()
 {
 	m_resourceManager = ResourceManager("levels.txt");
-	m_board = Board(m_resourceManager.getWidth(), m_resourceManager.getHeight(), m_resourceManager.enemyNum(0), m_resourceManager.getAreaToOccupy(0));
+	int pixelX = m_resourceManager.getWidth() / NUM_OF_ROWS;
+	int pixelY = m_resourceManager.getHeight() / NUM_OF_COLUMS;
+
+	m_board = Board(pixelX, pixelY, m_resourceManager.enemyNum(0), m_resourceManager.getAreaToOccupy(0));
 	m_player = m_board.getPlayer();
 }
 
 void Engine::run()
-{
+{	
 	m_window.create(sf::VideoMode(m_resourceManager.getWidth(), m_resourceManager.getHeight()), "Xonix");// = sf::RenderWindow(sf::VideoMode(m_resourceManager.getWidth(), m_resourceManager.getHeight()), "Xonix");
 	m_window.setFramerateLimit(60u);
 	
@@ -17,6 +21,7 @@ void Engine::run()
 	{
 		m_clock.restart();
 		processEvents();
+		handleCollision();
 		update();
 		render();
 	}
@@ -35,9 +40,9 @@ void Engine::processEvents()
 			m_window.close();
 		if (m_event.type == sf::Event::KeyPressed)
 		{
-			setPlayerDirection();
 		}
 	}
+			setPlayerDirection();
 }
 
 void Engine::setPlayerDirection()
@@ -62,4 +67,9 @@ void Engine::render()
 	m_window.clear();
 	m_board.draw(m_window);
 	m_window.display();
+}
+
+void Engine::handleCollision()
+{
+	m_board.handelCollison();
 }
