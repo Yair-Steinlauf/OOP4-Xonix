@@ -14,5 +14,6 @@ void MovingObject::setDirection(const sf::Vector2i& direction)
 
 void MovingObject::update(sf::Time time)
 {
-	m_rect.move(time.asSeconds() * m_speed, time.asSeconds() * m_speed);
+	m_rect.move(m_direction.x * m_speed * time.asSeconds() , m_direction.y * m_speed * time.asSeconds());
+	m_direction = sf::Vector2i(0, 0);
 }

@@ -42,23 +42,14 @@ void Engine::processEvents()
 
 void Engine::setPlayerDirection()
 {
-	switch (m_event.key.code)
-	{
-	case sf::Keyboard::Up:
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		m_player.get()->setDirection(sf::Vector2i(0, -1));
-		break;
-	case sf::Keyboard::Down:
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		m_player.get()->setDirection(sf::Vector2i(0, 1));
-		break;
-	case sf::Keyboard::Left:
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		m_player.get()->setDirection(sf::Vector2i(-1, 0));
-		break;
-	case sf::Keyboard::Right:
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		m_player.get()->setDirection(sf::Vector2i(1, 0));
-		break;
-	default:
-		break;
-	}
 }
 
 void Engine::update()
