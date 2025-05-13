@@ -1,10 +1,9 @@
 #include "Pixel.h"
-#include "Pixel.h"
 
 
-Pixel::Pixel(sf::Vector2i pos) : GameObject(pos)
+Pixel::Pixel(sf::Vector2i pos, int pixelSizeX, int pixelSizeY) : GameObject(pos, pixelSizeX,pixelSizeY)
 {
-	m_rect.setSize(pixelSize);
+
 }
 
 Type Pixel::getType() const

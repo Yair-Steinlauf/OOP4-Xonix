@@ -1,8 +1,9 @@
 #include "GameObject.h"
 
-GameObject::GameObject(sf::Vector2i pos) :
+GameObject::GameObject(sf::Vector2i pos, int pixelSizeX, int pixelSizeY ) :
 	m_rect()
 {
+	m_rect.setSize(sf::Vector2f(pixelSizeX, pixelSizeY));
 	m_rect.setPosition(pos.x, pos.y);
 }
 

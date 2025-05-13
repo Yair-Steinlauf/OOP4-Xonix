@@ -26,7 +26,7 @@ private:
 	void setPlayerDirection();
 	void update();
 	void render();
-	//void handleCollision();
+	void handleCollision();
 	//void resetGame();
 	//void drawGameOverScreen();
 };

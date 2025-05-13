@@ -1,12 +1,13 @@
+﻿#include "Board.h"
 
-#include "Board.h"
 
-
-Board::Board(int xSize, int ySize, int numOfEnemies, int requierdPercentWin)
+Board::Board(int PixelxSize, int PixelySize, int numOfEnemies, int requierdPercentWin)
 {
-	initBoard(xSize, ySize);
-    fillEnemysVector(numOfEnemies, xSize, ySize);
-    m_player = std::make_shared<Player>(sf::Vector2i(1, 1));
+    m_pixelSize.x = PixelxSize;
+    m_pixelSize.y = PixelySize;
+	initBoard();
+    fillEnemysVector(numOfEnemies);
+    m_player = std::make_shared<Player>(sf::Vector2i(0,0), m_pixelSize.x, m_pixelSize.y);
 }
 
 void Board::draw(sf::RenderWindow& window)
@@ -37,16 +38,78 @@ void Board::update(sf::Time time)
 
 void Board::handelCollison()
 {
-    for (size_t row = 0; row < m_matrix.size(); row++) {
-        for (size_t col = 0; col < m_matrix[row].size(); col++) {
-            auto pixelPos = sf::Vector2f(row, col);
-            handelPlayerCollision(pixelPos, row, col);
-            handleEnemyCollison(pixelPos, row, col);
+    handleEnemyCollision();
+    
+    handlePlayerColliosion();
+
+}
+
+
+void Board::handlePlayerColliosion()
+{
+    if (!isInBoardGrid(m_player.get()->getNextPosGrid()))
+        m_player.get()->setDirection(sf::Vector2i(0, 0));
+
+    int nextRowIndex = m_player.get()->getNextPosGrid().x;
+    int nextColIndex = m_player.get()->getNextPosGrid().y;   
+    sf::Vector2i curPos(m_player.get()->getPos().x, m_player.get()->getPos().y);
+    switch (m_matrix[nextRowIndex][nextColIndex].get()->getType()) {
+    case Unoccupied:
+        
+        m_matrix[nextRowIndex][nextColIndex] = std::make_unique<TrailPixel>(
+            
+            curPos, m_pixelSize.x,m_pixelSize.y);
+        m_player.get()->startOccuping();
+        break;
+    case Trail:
+        m_player.get()->fail();
+        break;
+    case Occupied:
+        if (m_player.get()->isOccupying()) {
+            m_player.get()->stopOccuping();
+            fillOccupied();
+        }
+        break;
+    }
+}
+
+bool Board::isInBoardGrid(sf::Vector2i point)
+{
+
+    if ((point.x < NUM_OF_ROWS && point.x >= 0) &&
+        (point.y < NUM_OF_COLUMS && point.y >= 0))
+        return true;
+     return false;
+}
+
+void Board::handleEnemyCollision()
+{
+    for (const auto& enemy : m_enemys) {
+        int nextRowIndex = enemy.get()->getNextPosGrid().x;
+        int nextColIndex = enemy.get()->getNextPosGrid().y;
+
+        switch (m_matrix[nextRowIndex][nextColIndex].get()->getType()) {
+        case Trail:
+            m_player.get()->fail();
+            break;
+        case Occupied:
+            changeEnemyDirection(enemy, nextColIndex, nextRowIndex);
+            break;
         }
     }
-    for (const auto& enemy : m_enemys) {
-        //if (enemy.get()->intersect(m_player.get())); TODO: enemy vs player collision
+}
+
+void Board::changeEnemyDirection(const std::unique_ptr<Enemy>& enemy, int col, int row)
+{
+    CollisionType collision;
+    if (m_matrix[enemy->getPosGrid().x][col].get()->getType() == Occupied) {
+        collision = CollisionType::Horizontal; // שינוי בציר X → קיר אנכי (ימין/שמאל)
     }
+    else if (m_matrix[row][enemy->getPosGrid().y].get()->getType() == Occupied)
+        collision = CollisionType::Vertical; // שינוי בציר Y → קיר אופקי (למעלה/למטה)
+    else
+        throw std::runtime_error("No position change detected – invalid collision");
+    enemy.get()->changeDirection(collision);
 }
 
 std::shared_ptr<Player> Board::getPlayer()
@@ -54,70 +117,33 @@ std::shared_ptr<Player> Board::getPlayer()
     return m_player;
 }
 
-void Board::handleEnemyCollison(sf::Vector2f& pixelPos, size_t row, size_t col)
+void Board::fillEnemysVector(int numOfEnemies)
 {
-    for (const auto& enemy : m_enemys) {
-        if (enemy.get()->contains(pixelPos) )
-            switch (m_matrix[row][col].get()->getType()) {
-
-                case Trail:
-                    m_player.get()->fail();
-                    break;
-                case Occupied:
-                    enemy.get()->changeDirection();
-            }
-
-    }
-}
-
-void Board::handelPlayerCollision(sf::Vector2f& pixelPos, size_t row, size_t col)
-{
-    if (m_player.get()->contains(pixelPos)) {
-        switch (m_matrix[row][col].get()->getType()) {
-        case Unoccupied:
-            m_matrix[row][col] = std::make_unique<TrailPixel>(sf::Vector2i(row, col));
-            m_player.get()->startOccuping();
-            break;
-        case Trail:
-            m_player.get()->fail();
-            break;
-        case Bound:
-            m_player.get()->setDirection(sf::Vector2i(0, 0));
-            break;
-        case Occupied:
-            if (m_player.get()->isOccupying()) {
-                m_player.get()->stopOccuping();
-                fillOccupied();
-            }
-            break;
-        }
-
-    }
-}
-
-void Board::fillEnemysVector(int numOfEnemies, int xSize, int ySize)
-{
+    srand(17);
     for (int i = 0; i < numOfEnemies; i++) {
-        int x = rand() % (xSize - 2) + 1;
-        int y = rand() % (ySize - 2) + 1;
-        m_enemys.push_back(std::make_unique<Enemy>(sf::Vector2i(x, y)));
+        int col = rand() % (NUM_OF_COLUMS - 2) + 1;
+        int row = rand() % (NUM_OF_ROWS - 2) + 1;
+        sf::Vector2i pos(row * m_pixelSize.x, col * m_pixelSize.y);
+        m_enemys.push_back(std::make_unique<Enemy>(pos, m_pixelSize.x, m_pixelSize.y));
     }
 }
 
-void Board::initBoard(int xSize, int ySize)
+void Board::initBoard()
 {
-    m_matrix.resize(xSize);
-    for (int x = 0; x < xSize; x++) {
-        m_matrix[x].resize(ySize);
-        for (int y = 0; y < ySize; y++) {
-            if (x == 0 || x == xSize - 1 || y == 0 || y == ySize - 1) {
-                m_matrix[x][y] = std::make_unique<BoundPixel>(sf::Vector2i(x, y));
+    m_matrix.resize(NUM_OF_ROWS); // 
+    for (int row = 0; row < NUM_OF_ROWS; row++) {
+        m_matrix[row].resize(NUM_OF_COLUMS);
+        for (int col = 0; col < NUM_OF_COLUMS; col++) {
+            sf::Vector2i pos(row * m_pixelSize.x, col * m_pixelSize.y);
+            if (row <= 1 || row >= NUM_OF_ROWS - 2 || col <= 1 || col >= NUM_OF_COLUMS - 2) {
+                m_matrix[row][col] = std::make_unique<OccupiedPixel>(pos,m_pixelSize.x, m_pixelSize.y );
             }
             else {
-                m_matrix[x][y] = std::make_unique<UnoccupiedPixel>(sf::Vector2i(x, y));
+                m_matrix[row][col] = std::make_unique<UnoccupiedPixel>(pos ,m_pixelSize.x, m_pixelSize.y);
             }
         }
     }
+
 }
 
 void Board::fillOccupied()
