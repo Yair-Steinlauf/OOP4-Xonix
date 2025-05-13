@@ -1,3 +1,4 @@
+#pragma once
 #include "Pixel.h"
 
 class BoundPixel : public Pixel {

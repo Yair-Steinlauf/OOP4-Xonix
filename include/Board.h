@@ -23,9 +23,10 @@ public:
 	void draw(sf::RenderWindow& window);
 	void update(sf::Time time);
 	void handelCollison();
-	void handleEnemyCollison(sf::Vector2f& pixelPos, size_t row, size_t col);
-	void handelPlayerCollision(sf::Vector2f& pixelPos, size_t row, size_t col);
+	std::shared_ptr<Player> getPlayer();
 private:
+	void handelPlayerCollision(sf::Vector2f& pixelPos, size_t row, size_t col);
+	void handleEnemyCollison(sf::Vector2f& pixelPos, size_t row, size_t col);
 	void fillEnemysVector(int numOfEnemies, int xSize, int ySize);
 	void initBoard(int xSize, int ySize);
 	void fillOccupied();

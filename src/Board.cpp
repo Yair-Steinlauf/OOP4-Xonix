@@ -27,11 +27,11 @@ void Board::draw(sf::RenderWindow& window)
 
 void Board::update(sf::Time time)
 {
-    //draw enemys
+    //update enemys
     for (const auto& enemy : m_enemys) {
         enemy.get()->update(time);
     }
-    //draw Player
+    //update Player
     m_player.get()->update(time);
 }
 
@@ -47,6 +47,11 @@ void Board::handelCollison()
     for (const auto& enemy : m_enemys) {
         //if (enemy.get()->intersect(m_player.get())); TODO: enemy vs player collision
     }
+}
+
+std::shared_ptr<Player> Board::getPlayer()
+{
+    return m_player;
 }
 
 void Board::handleEnemyCollison(sf::Vector2f& pixelPos, size_t row, size_t col)
@@ -113,4 +118,9 @@ void Board::initBoard(int xSize, int ySize)
             }
         }
     }
+}
+
+void Board::fillOccupied()
+{
+	// TODO: fill occupied
 }

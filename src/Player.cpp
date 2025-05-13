@@ -5,7 +5,8 @@ Player::Player(sf::Vector2i startPos) : MovingObject(startPos, PLAYER_SPEED), m_
 	m_rect.setPosition(sf::Vector2f(startPos.x, startPos.y));
 	m_rect.setFillColor(sf::Color::White);
 	m_rect.setOutlineColor(sf::Color::Red);
-	m_rect.setOutlineThickness(0.01);
+	m_rect.setOutlineThickness(OutlineThickness);
+	m_speed = 70000;
 }
 
 void Player::fail()

@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 class BoundPixel;
 class OccupiedPixel;
@@ -17,7 +18,7 @@ public:
 	bool intersect(GameObject& other);
 	sf::Vector2f getPos() const;
 	virtual void update(sf::Time time) {};
-	virtual void collide(GameObject& other) = 0;
+	virtual void collide(GameObject& other) {};
 	virtual void collide(BoundPixel& other) {};
 	virtual void collide(OccupiedPixel& other) {};
 	virtual void collide(TrailPixel& other) {};
