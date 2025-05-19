@@ -7,6 +7,7 @@ Player::Player(sf::Vector2i startPos, int pixelSizeX, int pixelSizeY) :
 	m_rect.setFillColor(sf::Color::White);
 	//m_rect.setOutlineColor(sf::Color::Red);
 	//m_rect.setOutlineThickness(OutlineThickness);
+
 	
 }
 

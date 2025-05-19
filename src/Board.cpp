@@ -21,27 +21,15 @@ sf::Vector2i Board::sfmlToGrid(sf::Vector2f pos) {
 
 
 void Board::draw(sf::RenderWindow& window)
-{
-
-    /*auto cell = sf::RectangleShape(sf::Vector2f(m_pixelSize));
-    for (int row = 0; row < NUM_OF_ROWS; row++) {
-        for (int col = 0; col < NUM_OF_COLUMS; col++) {
-            cell.setPosition(row * m_pixelSize.x, col * m_pixelSize.y);
-            sf::Color color;
-            switch (m_matrix[row][col])
-            {
-            case Occupied: color = sf::Color::Blue;
-                break;
-            case Unoccupied: color = sf::Color::Black;
-                break;
-            case Trail: color = sf::Color::Red;
-                break;
-            }
-            cell.setFillColor(color);
-            window.draw(cell);
+{       
+    for (int row = 0; row < NUM_OF_ROWS; row++)
+    {
+        for (int col = 0; col < NUM_OF_COLUMS; col++)
+        {
+			m_matrix[row][col].draw(&window);
         }
-    }*/
-       
+    }
+
     //draw enemys
     for (const auto& enemy : m_enemys) {
         enemy.get()->draw(&window);
@@ -152,17 +140,32 @@ void Board::fillEnemysVector(int numOfEnemies)
 
 void Board::initBoard()
 {
-    m_matrix.resize(NUM_OF_ROWS); // 
+    ////m_matrix.resize(NUM_OF_ROWS); 
+    //for (int row = 0; row < NUM_OF_ROWS; row++) {
+    //    m_matrix.push_back(Cell(Type::Occupied, sf::Vector2i(row, 0), m_pixelSize.x, m_pixelSize.y));
+    //    //m_matrix[row].resize(NUM_OF_COLUMS);
+    //    for (int col = 1; col < NUM_OF_COLUMS; col++) {
+    //        if (row <= 1 || row >= NUM_OF_ROWS - 2 || col <= 1 || col >= NUM_OF_COLUMS - 2) {                
+    //            //m_matrix[row][col] = ;
+    //            m_matrix[row].push_back(Cell(Type::Occupied, sf::Vector2i(row, col), m_pixelSize.x, m_pixelSize.y));
+    //        }
+    //        else {
+    //            m_matrix[row][col] = Cell(Type::Unoccupied, sf::Vector2i(row, col), m_pixelSize.x, m_pixelSize.y);
+    //        }
+    //    }
+    //}
     for (int row = 0; row < NUM_OF_ROWS; row++) {
-        m_matrix[row].resize(NUM_OF_COLUMS);
+        std::vector<Cell> rowCells;
+        rowCells.reserve(NUM_OF_COLUMS);
         for (int col = 0; col < NUM_OF_COLUMS; col++) {
-            if (row <= 1 || row >= NUM_OF_ROWS - 2 || col <= 1 || col >= NUM_OF_COLUMS - 2) {                
-                m_matrix[row][col] = Cell(Type::Occupied,sf::Vector2i(row, col),m_pixelSize.x,m_pixelSize.y);
+            if (row <= 1 || row >= NUM_OF_ROWS - 2 || col <= 1 || col >= NUM_OF_COLUMS - 2) {
+                rowCells.emplace_back(Type::Occupied, sf::Vector2i(row, col), m_pixelSize.x, m_pixelSize.y);
             }
             else {
-                m_matrix[row][col] = Cell(Type::Unoccupied, sf::Vector2i(row, col), m_pixelSize.x, m_pixelSize.y);
+                rowCells.emplace_back(Type::Unoccupied, sf::Vector2i(row, col), m_pixelSize.x, m_pixelSize.y);
             }
         }
+        m_matrix.push_back(std::move(rowCells));
     }
 
 }

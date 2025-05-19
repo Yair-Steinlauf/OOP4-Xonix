@@ -14,13 +14,11 @@ void MovingObject::setDirection(const sf::Vector2i& direction)
 void MovingObject::update(sf::Time time)
 {
 	// TODO: move faster and slower
-	if (m_moveTimer < sf::Time(sf::microseconds(100))) {
-		m_moveTimer += time;
-	}
-	else {
+	//m_moveTimer += time;
+	//if (m_moveTimer >= sf::Time(sf::microseconds(1300))) {
 		m_rect.move(m_direction.x * m_rect.getSize().x , m_direction.y * m_rect.getSize().y);
-		m_moveTimer = sf::microseconds(0);
-	}
+		//m_moveTimer -= sf::microseconds(1300);
+	//}
 	
 
 	//std::cout << time.asMilliseconds() << "\n";
