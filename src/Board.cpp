@@ -32,7 +32,7 @@ void Board::draw(sf::RenderWindow& window)
 
     //draw enemys
     for (const auto& enemy : m_enemys) {
-        enemy.get()->draw(&window);
+        enemy->draw(&window);
     }
     //draw Player
     m_player->draw(&window);
@@ -59,24 +59,24 @@ void Board::handelCollison()
 
 void Board::handlePlayerColliosion()
 {
-    if (!isInBoardGrid(m_player.get()->getNextPosGrid()))
-        m_player.get()->setDirection(sf::Vector2i(0, 0));
+    if (!isInBoardGrid(m_player->getNextPosGrid()))
+        m_player->setDirection(sf::Vector2i(0, 0));
 
-    int nextRowIndex = m_player.get()->getNextPosGrid().x;
-    int nextColIndex = m_player.get()->getNextPosGrid().y;   
-    sf::Vector2i curPos(m_player.get()->getPos().x, m_player.get()->getPos().y);
+    int nextRowIndex = m_player->getNextPosGrid().x;
+    int nextColIndex = m_player->getNextPosGrid().y;   
+    sf::Vector2i curPos(m_player->getPos().x, m_player->getPos().y);
     switch (m_matrix[nextRowIndex][nextColIndex].getType()) {
     case Unoccupied:
         
         m_matrix[nextRowIndex][nextColIndex].setType(Type::Trail);                        
-        m_player.get()->startOccuping();
+        m_player->startOccuping();
         break;
     case Trail:
-        m_player.get()->fail();
+        m_player->decreaseLife();
         break;
     case Occupied:
-        if (m_player.get()->isOccupying()) {
-            m_player.get()->stopOccuping();
+        if (m_player->isOccupying()) {
+            m_player->stopOccuping();
             fillOccupied();
         }
         break;
@@ -100,7 +100,7 @@ void Board::handleEnemyCollision()
 
         switch (m_matrix[nextRowIndex][nextColIndex].getType()) {
         case Trail:
-            m_player.get()->fail();
+            m_player->decreaseLife();
             break;
         case Occupied:
             changeEnemyDirection(enemy, nextColIndex, nextRowIndex);

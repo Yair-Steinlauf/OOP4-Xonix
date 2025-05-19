@@ -6,7 +6,9 @@
 #include "ResourceManager.h"
 #include <vector>
 #include <memory>
-
+#include "GamePlay.h"
+#include "GameStateManager.h"
+#include "GameState.h"
 
 class Engine{
 public:
@@ -20,10 +22,13 @@ private:
 	sf::Clock m_clock;
 	std::shared_ptr<Player> m_player;
 	//std::vector<Enemy> m_enemys;
+	void resetGame();
+	void drawGameOverScreen();
+	void drawGame();
 	ResourceManager m_resourceManager;
+	GameStateManager m_stateManager;
 	bool isGameOver	= false;
 	void processEvents();
-	void setPlayerDirection();
 	void update();
 	void render();
 	void handleCollision();

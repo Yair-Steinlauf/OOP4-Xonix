@@ -2,14 +2,10 @@
 #include "Types.h"
 #include <iostream>
 
+
 Engine::Engine()
 {
-	m_resourceManager = ResourceManager("levels.txt");
-	int pixelX = m_resourceManager.getWidth() / NUM_OF_ROWS;
-	int pixelY = m_resourceManager.getHeight() / NUM_OF_COLUMS;
-
-	m_board = Board(pixelX, pixelY, m_resourceManager.enemyNum(0), m_resourceManager.getAreaToOccupy(0));
-	m_player = m_board.getPlayer();
+	m_stateManager.pushState(std::make_unique<GamePlayState>(m_window, m_stateManager, m_resourceManager));
 }
 
 void Engine::run()
@@ -25,8 +21,6 @@ void Engine::run()
 		processEvents();
 		elapsed += m_clock.restart();
 		if (elapsed >= sf::microseconds(20000)) {
-			setPlayerDirection();
-			handleCollision();
 			update();
 			elapsed = sf::microseconds(0);
 		}
@@ -48,57 +42,24 @@ void Engine::processEvents()
 	{
 		if (m_event.type == sf::Event::Closed)
 			m_window.close();
-		if (m_event.type == sf::Event::KeyPressed)
-		{
-			//switch (m_event.key.code)
-			//{
-			//case sf::Keyboard::Up:
-			//	m_player->setDirection(sf::Vector2i(0, -1));
-			//	break;
-			//case sf::Keyboard::Down:
-			//	m_player->setDirection(sf::Vector2i(0, 1));
-			//	break;
-			//case sf::Keyboard::Left:
-			//	m_player->setDirection(sf::Vector2i(-1, 0));
-			//	break;
-			//case sf::Keyboard::Right:
-			//	m_player->setDirection(sf::Vector2i(1, 0));
-			//	break;
-			//default:
-			//	break; // לא עושים כלום אם נלחץ מקש אחר
-			//}
-		}
 
+		if (m_stateManager.hasState())
+			m_stateManager.getCurrentState()->handleEvent(m_event);
 	}
 
 }
 
-void Engine::setPlayerDirection()
-{
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		m_player.get()->setDirection(sf::Vector2i(0, -1));
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		m_player.get()->setDirection(sf::Vector2i(0, 1));
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		m_player.get()->setDirection(sf::Vector2i(-1, 0));
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		m_player.get()->setDirection(sf::Vector2i(1, 0));
-}
 
 void Engine::update()
 {
-	m_board.update(m_clock.getElapsedTime());
+	if (m_stateManager.hasState())
+		m_stateManager.getCurrentState()->update(m_clock.getElapsedTime());
+
 }
 
 void Engine::render()
 {
-	m_window.clear();
-	m_board.draw(m_window);
-	m_window.display();
-}
-
-void Engine::handleCollision()
-{
-	m_board.handelCollison();
+	if (m_stateManager.hasState())
+		m_stateManager.getCurrentState()->render(m_window);
 }

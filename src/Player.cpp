@@ -9,10 +9,6 @@ Player::Player(sf::Vector2i startPos, int pixelSizeX, int pixelSizeY) :
 	
 }
 
-void Player::fail()
-{
-	//TODO: fail stuff
-}
 
 bool Player::isOccupying() const
 {
@@ -33,4 +29,18 @@ void Player::update(sf::Time time)
 {
 	MovingObject::update(time);
 	m_direction = sf::Vector2i(0, 0);
+	if (m_has_been_hit) {
+		m_life--;
+		m_has_been_hit = false;
+	}
+}
+
+void Player::decreaseLife()
+{
+	m_has_been_hit = true;
+}
+
+bool Player::isFailed() const
+{
+	return m_life > 0;
 }
