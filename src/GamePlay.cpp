@@ -2,7 +2,9 @@
 #include "GameOverState.h"
 
 GamePlayState::GamePlayState(sf::RenderWindow& window, GameStateManager& manager)
-	: m_window(window), m_manager(manager)
+	: m_window(window),
+	m_manager(manager),
+	m_scoreBoard(ScoreBoard(sf::Vector2f(200, 200), sf::Vector2f(10, 10)))
 {
 	m_resourceManager = &FilesManager::getInstance();
 	int pixelX = m_resourceManager->getWidth() / NUM_OF_ROWS;
@@ -35,6 +37,7 @@ void GamePlayState::update(sf::Time dt)
 {
 	m_board.handelCollison();
 	m_board.update(dt);
+	m_scoreBoard.update(m_player.get());
 	if (m_player->isFailed()) {
 		m_manager.changeState(std::make_unique<GameOverState>(m_window, m_manager));
 	}

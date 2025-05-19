@@ -18,20 +18,13 @@ public:
 private:
 	sf::RenderWindow m_window;
 	sf::Event m_event;
-	Board m_board;
 	sf::Clock m_clock;
-	std::shared_ptr<Player> m_player;
-	//std::vector<Enemy> m_enemys;
-	void resetGame();
-	void drawGameOverScreen();
-	void drawGame();
+	//void resetGame();
+	//void drawGameOverScreen();
+	//void drawGame();
 	FilesManager* m_resourceManager;
 	GameStateManager m_stateManager;
-	bool isGameOver	= false;
 	void processEvents();
 	void update();
 	void render();
-	void handleCollision();
-	//void resetGame();
-	//void drawGameOverScreen();
 };

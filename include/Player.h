@@ -14,6 +14,9 @@ public:
 	void decreaseLife();
 	bool isWon() const;
 	bool isFailed() const;
+	int getLife() const;
+	int getScore() const;
+	int getOccupiedAreaPercent() const;
 
 
 private:

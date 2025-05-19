@@ -4,6 +4,8 @@
 #include "ResourceManager.h"
 #include "Board.h"
 #include "Player.h"
+#include "ScoreBoard.h"
+
 
 class GamePlayState : public GameState {
 public:
@@ -19,6 +21,7 @@ private:
     sf::RenderWindow& m_window;
     GameStateManager& m_manager;
     FilesManager* m_resourceManager;
-    std::shared_ptr<Player> m_player;
+	ScoreBoard m_scoreBoard;
     Board m_board;
+	std::shared_ptr<Player> m_player;
 };

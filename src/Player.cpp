@@ -51,3 +51,18 @@ bool Player::isFailed() const
 	//std::cout << "Player life: " << m_life << std::endl;
 	return m_life <= 0;
 }
+
+int Player::getLife() const
+{
+	return m_life;
+}
+
+int Player::getScore() const
+{
+	return m_score;
+}
+
+int Player::getOccupiedAreaPercent() const
+{
+	return m_occupiedAreaPercent;
+}
