@@ -38,9 +38,7 @@ void Engine::processEvents()
 	{
 		if (m_event.type == sf::Event::Closed)
 			m_window.close();
-		if (m_event.type == sf::Event::KeyPressed)
-		{
-		}
+
 	}
 			setPlayerDirection();
 }

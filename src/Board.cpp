@@ -23,17 +23,17 @@ void Board::draw(sf::RenderWindow& window)
         enemy.get()->draw(&window);
     }
     //draw Player
-    m_player.get()->draw(&window);
+    m_player->draw(&window);
 }
 
 void Board::update(sf::Time time)
 {
     //update enemys
     for (const auto& enemy : m_enemys) {
-        enemy.get()->update(time);
+        enemy->update(time);
     }
     //update Player
-    m_player.get()->update(time);
+    m_player->update(time);
 }
 
 void Board::handelCollison()
@@ -103,10 +103,10 @@ void Board::changeEnemyDirection(const std::unique_ptr<Enemy>& enemy, int col, i
 {
     CollisionType collision;
     if (m_matrix[enemy->getPosGrid().x][col].get()->getType() == Occupied) {
-        collision = CollisionType::Horizontal; // שינוי בציר X → קיר אנכי (ימין/שמאל)
+        collision = CollisionType::Horizontal; 
     }
     else if (m_matrix[row][enemy->getPosGrid().y].get()->getType() == Occupied)
-        collision = CollisionType::Vertical; // שינוי בציר Y → קיר אופקי (למעלה/למטה)
+        collision = CollisionType::Vertical; 
     else
         throw std::runtime_error("No position change detected – invalid collision");
     enemy.get()->changeDirection(collision);
