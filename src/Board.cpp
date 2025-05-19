@@ -140,20 +140,6 @@ void Board::fillEnemysVector(int numOfEnemies)
 
 void Board::initBoard()
 {
-    ////m_matrix.resize(NUM_OF_ROWS); 
-    //for (int row = 0; row < NUM_OF_ROWS; row++) {
-    //    m_matrix.push_back(Cell(Type::Occupied, sf::Vector2i(row, 0), m_pixelSize.x, m_pixelSize.y));
-    //    //m_matrix[row].resize(NUM_OF_COLUMS);
-    //    for (int col = 1; col < NUM_OF_COLUMS; col++) {
-    //        if (row <= 1 || row >= NUM_OF_ROWS - 2 || col <= 1 || col >= NUM_OF_COLUMS - 2) {                
-    //            //m_matrix[row][col] = ;
-    //            m_matrix[row].push_back(Cell(Type::Occupied, sf::Vector2i(row, col), m_pixelSize.x, m_pixelSize.y));
-    //        }
-    //        else {
-    //            m_matrix[row][col] = Cell(Type::Unoccupied, sf::Vector2i(row, col), m_pixelSize.x, m_pixelSize.y);
-    //        }
-    //    }
-    //}
     for (int row = 0; row < NUM_OF_ROWS; row++) {
         std::vector<Cell> rowCells;
         rowCells.reserve(NUM_OF_COLUMS);
