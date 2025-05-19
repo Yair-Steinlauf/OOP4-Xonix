@@ -17,12 +17,22 @@ void Engine::run()
 	m_window.create(sf::VideoMode(m_resourceManager.getWidth(), m_resourceManager.getHeight()), "Xonix");// = sf::RenderWindow(sf::VideoMode(m_resourceManager.getWidth(), m_resourceManager.getHeight()), "Xonix");
 	m_window.setFramerateLimit(60u);
 	
+	sf::Time elapsed = sf::Time::Zero;
 	while (m_window.isOpen())
 	{
-		m_clock.restart();
+
+
 		processEvents();
-		handleCollision();
-		update();
+		elapsed += m_clock.restart();
+		if (elapsed >= sf::microseconds(20000)) {
+			setPlayerDirection();
+			handleCollision();
+			update();
+			elapsed = sf::microseconds(0);
+		}
+
+	
+			
 		render();
 	}
 	/*std::cout << m_resourceManager.getWidth() << " " << m_resourceManager.getWidth() << " " << m_resourceManager.getLife() << '\n';
@@ -38,13 +48,34 @@ void Engine::processEvents()
 	{
 		if (m_event.type == sf::Event::Closed)
 			m_window.close();
+		if (m_event.type == sf::Event::KeyPressed)
+		{
+			//switch (m_event.key.code)
+			//{
+			//case sf::Keyboard::Up:
+			//	m_player->setDirection(sf::Vector2i(0, -1));
+			//	break;
+			//case sf::Keyboard::Down:
+			//	m_player->setDirection(sf::Vector2i(0, 1));
+			//	break;
+			//case sf::Keyboard::Left:
+			//	m_player->setDirection(sf::Vector2i(-1, 0));
+			//	break;
+			//case sf::Keyboard::Right:
+			//	m_player->setDirection(sf::Vector2i(1, 0));
+			//	break;
+			//default:
+			//	break; // לא עושים כלום אם נלחץ מקש אחר
+			//}
+		}
 
 	}
-			setPlayerDirection();
+
 }
 
 void Engine::setPlayerDirection()
 {
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		m_player.get()->setDirection(sf::Vector2i(0, -1));
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))

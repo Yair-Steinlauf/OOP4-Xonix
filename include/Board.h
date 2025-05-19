@@ -2,11 +2,7 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
-#include "Pixel.h"
-#include "BoundPixel.h"
-#include "OccupiedPixel.h"
-#include "UnOccupiedPixel.h"
-#include "TrailPixel.h"
+#include "Cell.h"
 #include "Enemy.h"
 #include "Player.h"
 #include "GameObject.h"
@@ -15,7 +11,8 @@
 #include <memory>
 
 
-using MatrixPixel = std::vector<std::vector<std::unique_ptr<Pixel>>> ;
+
+using MatrixCell = std::vector<std::vector<Cell>> ;
 
 
 
@@ -27,6 +24,8 @@ public:
 	void handelCollison();
 	std::shared_ptr<Player> getPlayer();
 private:
+	sf::Vector2f gridToSfml(int row, int col);
+	sf::Vector2i sfmlToGrid(sf::Vector2f pos);
 	void handleEnemyCollision();
 	void changeEnemyDirection(const std::unique_ptr<Enemy>& enemy, int col, int row);
 	bool isInBoardGrid(sf::Vector2i point);
@@ -34,9 +33,10 @@ private:
 	void fillEnemysVector(int numOfEnemies);
 	void initBoard();
 	void fillOccupied();
-	MatrixPixel m_matrix;
+	MatrixCell m_matrix;
 	std::vector<std::unique_ptr<Enemy>> m_enemys;
 	std::shared_ptr<Player> m_player;
 	sf::Vector2i m_pixelSize;
 
 };
+

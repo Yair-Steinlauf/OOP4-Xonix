@@ -6,7 +6,6 @@ const int OutlineThickness = 3;
 class MovingObject : public GameObject {
 public:
 	MovingObject(sf::Vector2i position, int speed = 0, int pixelSizeX = 16, int pixelSizeY = 16, sf::Vector2i direction = sf::Vector2i(1,1));
-	//void collide(BoundPixel& other) override;
 	void setDirection(const sf::Vector2i& direction);
 	virtual void update(sf::Time time) override;
 	sf::Vector2i getNextPosGrid() const;
