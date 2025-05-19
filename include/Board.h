@@ -2,11 +2,6 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
-//#include "Pixel.h"
-//#include "BoundPixel.h"
-//#include "OccupiedPixel.h"
-//#include "UnOccupiedPixel.h"
-//#include "TrailPixel.h"
 #include "Cell.h"
 #include "Enemy.h"
 #include "Player.h"
@@ -38,7 +33,6 @@ private:
 	void fillEnemysVector(int numOfEnemies);
 	void initBoard();
 	void fillOccupied();
-	//MatrixPixel m_matrixPixel;
 	MatrixCell m_matrix;
 	std::vector<std::unique_ptr<Enemy>> m_enemys;
 	std::shared_ptr<Player> m_player;

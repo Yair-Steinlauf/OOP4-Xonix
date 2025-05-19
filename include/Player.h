@@ -7,9 +7,6 @@ const int PLAYER_SPEED = 3;
 class Player : public MovingObject {
 public:
 	Player(sf::Vector2i startPos, int pixelSizeX = 16, int pixelSizeY = 16);
-	//void collide(UnoccupiedPixel& other);
-	//void collide(Enemy& other);
-	//void collide(OccupiedPixel& other);
 	void fail();
 	bool isOccupying() const;
 	void startOccuping();
