@@ -7,7 +7,7 @@
 
 class GamePlayState : public GameState {
 public:
-    GamePlayState(sf::RenderWindow& window, GameStateManager& manager, ResourceManager& resourceManager);
+    GamePlayState(sf::RenderWindow& window, GameStateManager& manager);
 
     void handleEvent(sf::Event& event) override;
 
@@ -18,7 +18,7 @@ private:
     void setPlayerDirection();
     sf::RenderWindow& m_window;
     GameStateManager& m_manager;
-    ResourceManager& m_resourceManager;
+    FilesManager* m_resourceManager;
     std::shared_ptr<Player> m_player;
     Board m_board;
 };

@@ -5,12 +5,12 @@
 
 Engine::Engine()
 {
-	m_stateManager.pushState(std::make_unique<GamePlayState>(m_window, m_stateManager, m_resourceManager));
+	m_stateManager.pushState(std::make_unique<GamePlayState>(m_window, m_stateManager));
 }
 
 void Engine::run()
 {	
-	m_window.create(sf::VideoMode(m_resourceManager.getWidth(), m_resourceManager.getHeight()), "Xonix");// = sf::RenderWindow(sf::VideoMode(m_resourceManager.getWidth(), m_resourceManager.getHeight()), "Xonix");
+	m_window.create(sf::VideoMode(m_resourceManager->getWidth(), m_resourceManager->getHeight()), "Xonix");
 	m_window.setFramerateLimit(60u);
 	
 	sf::Time elapsed = sf::Time::Zero;
@@ -29,11 +29,6 @@ void Engine::run()
 			
 		render();
 	}
-	/*std::cout << m_resourceManager.getWidth() << " " << m_resourceManager.getWidth() << " " << m_resourceManager.getLife() << '\n';
-	for (int i = 0; i < m_resourceManager.getLevelCount(); i++)
-	{
-		std::cout << m_resourceManager.getAreaToOccupy(i) << " " << m_resourceManager.enemyNum(i) << '\n';
-	}*/
 }
 
 void Engine::processEvents()
@@ -43,9 +38,9 @@ void Engine::processEvents()
 		if (m_event.type == sf::Event::Closed)
 			m_window.close();
 
+	}
 		if (m_stateManager.hasState())
 			m_stateManager.getCurrentState()->handleEvent(m_event);
-	}
 
 }
 

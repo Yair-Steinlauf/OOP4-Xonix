@@ -62,17 +62,21 @@ void Board::handlePlayerColliosion()
     if (!isInBoardGrid(m_player->getNextPosGrid()))
         m_player->setDirection(sf::Vector2i(0, 0));
 
-    int nextRowIndex = m_player->getNextPosGrid().x;
-    int nextColIndex = m_player->getNextPosGrid().y;   
-    sf::Vector2i curPos(m_player->getPos().x, m_player->getPos().y);
+    handlePlayerOnGrid(m_player->getNextPosGrid().x, m_player->getNextPosGrid().y);
+}
+
+void Board::handlePlayerOnGrid(int nextRowIndex, int nextColIndex)
+{
     switch (m_matrix[nextRowIndex][nextColIndex].getType()) {
     case Unoccupied:
-        
-        m_matrix[nextRowIndex][nextColIndex].setType(Type::Trail);                        
+        //occupy new area
+        m_matrix[nextRowIndex][nextColIndex].setType(Type::Trail);
         m_player->startOccuping();
         break;
     case Trail:
-        m_player->decreaseLife();
+        //if player moved
+        if (m_player->getNextPosGrid() != m_player->getPosGrid())
+            m_player->decreaseLife();
         break;
     case Occupied:
         if (m_player->isOccupying()) {
@@ -95,8 +99,8 @@ bool Board::isInBoardGrid(sf::Vector2i point)
 void Board::handleEnemyCollision()
 {
     for (const auto& enemy : m_enemys) {
-        int nextRowIndex = enemy.get()->getNextPosGrid().x;
-        int nextColIndex = enemy.get()->getNextPosGrid().y;
+        int nextRowIndex = enemy->getNextPosGrid().x;
+        int nextColIndex = enemy->getNextPosGrid().y;
 
         switch (m_matrix[nextRowIndex][nextColIndex].getType()) {
         case Trail:

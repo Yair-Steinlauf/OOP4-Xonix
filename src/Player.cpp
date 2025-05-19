@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include "iostream"
 Player::Player(sf::Vector2i startPos, int pixelSizeX, int pixelSizeY) : 
 	MovingObject(startPos, PLAYER_SPEED,pixelSizeX, pixelSizeY), m_startPos(startPos)
 {
@@ -37,10 +37,17 @@ void Player::update(sf::Time time)
 
 void Player::decreaseLife()
 {
+	std::cout << "Player life: " << m_life << std::endl;
 	m_has_been_hit = true;
+}
+
+bool Player::isWon() const
+{
+	return m_occupiedAreaPercent >= 80;
 }
 
 bool Player::isFailed() const
 {
-	return m_life > 0;
+	//std::cout << "Player life: " << m_life << std::endl;
+	return m_life <= 0;
 }

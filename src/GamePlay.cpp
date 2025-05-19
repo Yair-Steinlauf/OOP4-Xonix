@@ -1,22 +1,20 @@
 #include "GamePlay.h"
-#include "GamePlay.h"
-#include "GamePlay.h"
+#include "GameOverState.h"
 
-#include "GamePlay.h"
-
-GamePlayState::GamePlayState(sf::RenderWindow& window, GameStateManager& manager, ResourceManager& resourceManager)
-	: m_window(window), m_manager(manager), m_resourceManager(resourceManager)
+GamePlayState::GamePlayState(sf::RenderWindow& window, GameStateManager& manager)
+	: m_window(window), m_manager(manager)
 {
-	m_resourceManager = ResourceManager("levels.txt");
-	int pixelX = m_resourceManager.getWidth() / NUM_OF_ROWS;
-	int pixelY = m_resourceManager.getHeight() / NUM_OF_COLUMS;
+	m_resourceManager = &FilesManager::getInstance();
+	int pixelX = m_resourceManager->getWidth() / NUM_OF_ROWS;
+	int pixelY = m_resourceManager->getHeight() / NUM_OF_COLUMS;
 
-	m_board = Board(pixelX, pixelY, m_resourceManager.enemyNum(0), m_resourceManager.getAreaToOccupy(0));
+	m_board = Board(pixelX, pixelY, m_resourceManager->enemyNum(0), m_resourceManager->getAreaToOccupy(0));
 	m_player = m_board.getPlayer();
 }
 
 void GamePlayState::handleEvent(sf::Event& event)
 {
+
 	setPlayerDirection();
 }
 
@@ -37,6 +35,12 @@ void GamePlayState::update(sf::Time dt)
 {
 	m_board.handelCollison();
 	m_board.update(dt);
+	if (m_player->isFailed()) {
+		m_manager.changeState(std::make_unique<GameOverState>(m_window, m_manager));
+	}
+	//else if (m_player->isWon()) {
+	//	m_manager.changeState(std::make_unique<WinState>(m_window, m_manager, m_resourceManager));
+	//}
 }
 
 void GamePlayState::render(sf::RenderWindow& window)

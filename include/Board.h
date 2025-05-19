@@ -30,6 +30,7 @@ private:
 	void changeEnemyDirection(const std::unique_ptr<Enemy>& enemy, int col, int row);
 	bool isInBoardGrid(sf::Vector2i point);
 	void handlePlayerColliosion();
+	void handlePlayerOnGrid(int nextRowIndex, int nextColIndex);
 	void fillEnemysVector(int numOfEnemies);
 	void initBoard();
 	void fillOccupied();

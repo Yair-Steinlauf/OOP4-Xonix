@@ -25,7 +25,7 @@ private:
 	void resetGame();
 	void drawGameOverScreen();
 	void drawGame();
-	ResourceManager m_resourceManager;
+	FilesManager* m_resourceManager;
 	GameStateManager m_stateManager;
 	bool isGameOver	= false;
 	void processEvents();

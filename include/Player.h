@@ -12,6 +12,7 @@ public:
 	void stopOccuping();
 	void update(sf::Time time) override;
 	void decreaseLife();
+	bool isWon() const;
 	bool isFailed() const;
 
 

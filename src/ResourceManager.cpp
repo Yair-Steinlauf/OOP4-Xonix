@@ -1,40 +1,46 @@
 #include "ResourceManager.h"
 
-ResourceManager::ResourceManager(std::string path) {
+FilesManager::FilesManager(std::string path) {
 	readLevels(path);
 }
 
-int ResourceManager::getWidth() const
+int FilesManager::getWidth() const
 {
-	return m_width;
+	return getInstance().m_width;
 }
 
-int ResourceManager::getHeight() const
+int FilesManager::getHeight() const
 {
-	return m_height;
+	return getInstance().m_height;
 }
 
-int ResourceManager::getLife() const
+int FilesManager::getLife() const
 {
-	return m_life;
+	return getInstance().m_life;
 }
 
-int ResourceManager::getAreaToOccupy(int level)
+int FilesManager::getAreaToOccupy(int level)
 {
-	return m_levels[level].areaToOccupy;
+	return getInstance().m_levels[level].areaToOccupy;
 }
 
-int ResourceManager::enemyNum(int level)
+int FilesManager::enemyNum(int level)
 {
-	return m_levels[level].enemyNum;
+	return getInstance().m_levels[level].enemyNum;
 }
 
-int ResourceManager::getLevelCount()
+int FilesManager::getLevelCount()
 {
-	return m_levels.size();
+	return getInstance().m_levels.size();
 }
 
-void ResourceManager::readLevels(std::string& path)
+FilesManager& FilesManager::getInstance()
+{
+	static FilesManager instance;
+	return instance;
+}
+
+void FilesManager::readLevels(std::string& path)
 {
 	std::ifstream file(path);
 	if (!file) {
