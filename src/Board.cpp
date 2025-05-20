@@ -1,6 +1,6 @@
 ﻿#include "Board.h"
 #include <queue>
-
+#include "set"
 
 Board::Board(int PixelxSize, int PixelySize, int numOfEnemies, int requierdPercentWin)
 {
@@ -33,7 +33,7 @@ void Board::draw(sf::RenderWindow& window)
 
     //draw enemys
     for (const auto& enemy : m_enemys) {
-        enemy.get()->draw(&window);
+        enemy->draw(&window);
     }
     //draw Player
     m_player->draw(&window);
@@ -60,7 +60,6 @@ void Board::handelCollison()
 
 void Board::handlePlayerColliosion()
 {
-
     if (!isInBoardGrid(m_player.get()->getNextPosGrid()))
         m_player.get()->setDirection(sf::Vector2i(0, 0));
 
@@ -69,13 +68,15 @@ void Board::handlePlayerColliosion()
     sf::Vector2i curPos(m_player.get()->getPos().x, m_player.get()->getPos().y);
     switch (m_matrix[nextXIndex][nextYIndex].getType()) {
     case Unoccupied:
-        
         m_matrix[nextXIndex][nextYIndex].setType(Type::Trail);
         m_player.get()->startOccuping();
         m_player.get()->addPointTrail(nextXIndex, nextYIndex);
         break;
     case Trail:
-        m_player.get()->fail();
+        //if player moved
+        if (m_player->getNextPosGrid() != m_player->getPosGrid())
+            m_player->decreaseLife();
+//             TODO: Fail?
         break;
     case Occupied:
         if (m_player.get()->isOccupying()) {
@@ -117,7 +118,6 @@ void Board::handleEnemysCollision()
         case Occupied:
             changeEnemyDirection(enemy, nextXIndex, nextYIndex);
             break;
-        }
     }
 }
 
@@ -125,16 +125,11 @@ void Board::handleEnemysCollision()
 
 void Board::changeEnemyDirection(const std::unique_ptr<Enemy>& enemy, int x, int y)
 {
-    CollisionType collision;
     if (m_matrix[enemy->getPosGrid().x][enemy->getNextPosGrid().y].getType() == Occupied) {
         enemy.get()->changeDirection(CollisionType::Horizontal);
     }
     if (m_matrix[enemy->getNextPosGrid().x][enemy->getPosGrid().y].getType() == Occupied)
         enemy.get()->changeDirection(CollisionType::Vertical);
-    /*else {
-        enemy.get()->changeDirection(CollisionType::Vertical);
-        enemy.get()->changeDirection(CollisionType::Horizontal);
-    }*/
 }
 
 std::shared_ptr<Player> Board::getPlayer()
@@ -144,11 +139,19 @@ std::shared_ptr<Player> Board::getPlayer()
 
 void Board::fillEnemysVector(int numOfEnemies)
 {
-    srand(17);
+	std::set<std::pair<int, int>> usedPositions;
+	int row = 0;
+	int col = 0;
     for (int i = 0; i < numOfEnemies; i++) {
-        int x = rand() % (NUM_OF_COLUMS_X - 2) + 1;
-        int y = rand() % (NUM_OF_ROWS_Y - 2) + 1;
-        sf::Vector2i pos(x * m_pixelSize.x, y * m_pixelSize.y);        
+		//make diffrent random pos for every enemy
+        do {
+            col = rand() % (NUM_OF_COLUMS - 2) + 1;
+            row = rand() % (NUM_OF_ROWS - 2) + 1;
+		} while (usedPositions.find(std::make_pair(row, col)) != usedPositions.end());
+        usedPositions.insert(std::make_pair(row, col));
+
+        //add enemy
+        sf::Vector2i pos(row * m_pixelSize.x, col * m_pixelSize.y);
         m_enemys.push_back(std::make_unique<Enemy>(pos, m_pixelSize.x, m_pixelSize.y));
     }
 }
