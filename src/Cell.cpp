@@ -3,7 +3,7 @@
 Cell::Cell(Type type, sf::Vector2i pos, int pixelSizeX, int pixelSizeY)
 	: m_type(type) {
 		m_pixelRect.setPosition(sf::Vector2f(pos.x * pixelSizeX, pos.y * pixelSizeY));
-		m_pixelRect.setSize(sf::Vector2f(pixelSizeX, pixelSizeY));
+		m_pixelRect.setSize(sf::Vector2f(pixelSizeX, pixelSizeY));		
 		setType(type);		
 	}
 
