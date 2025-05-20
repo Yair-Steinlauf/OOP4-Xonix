@@ -5,8 +5,9 @@
 const sf::Vector2f ScoreBoardPadding = sf::Vector2f(0, 200);
 
 Engine::Engine()
+	:m_resourceManager(std::make_unique<FilesManager>())
 {
-	m_stateManager.pushState(std::make_unique<GamePlayState>(m_window, m_stateManager));
+	m_stateManager.pushState(std::make_unique<GamePlayState>(&m_window, &m_stateManager, m_resourceManager.get()));
 }
 
 void Engine::run()

@@ -1,4 +1,4 @@
-#include "ResourceManager.h"
+#include "FilesManager.h"
 
 FilesManager::FilesManager(std::string path) {
 	readLevels(path);
@@ -6,39 +6,39 @@ FilesManager::FilesManager(std::string path) {
 
 int FilesManager::getWidth() const
 {
-	return getInstance().m_width;
+	return m_width;
 }
 
 int FilesManager::getHeight() const
 {
-	return getInstance().m_height;
+	return m_height;
 }
 
 int FilesManager::getLife() const
 {
-	return getInstance().m_life;
+	return m_life;
 }
 
 int FilesManager::getAreaToOccupy(int level)const
 {
-	return getInstance().m_levels[level].areaToOccupy;
+	return m_levels[level].areaToOccupy;
 }
 
 int FilesManager::enemyNum(int level)const
 {
-	return getInstance().m_levels[level].enemyNum;
+	return m_levels[level].enemyNum;
 }
 
 int FilesManager::getLevelCount()const
 {
-	return getInstance().m_levels.size();
+	return m_levels.size();
 }
 
-FilesManager& FilesManager::getInstance()
-{
-	static FilesManager instance;
-	return instance;
-}
+//FilesManager& FilesManager::getInstance()
+//{
+//	static FilesManager instance;
+//	return instance;
+//}
 
 void FilesManager::readLevels(std::string& path)
 {

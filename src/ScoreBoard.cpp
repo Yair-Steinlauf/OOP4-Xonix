@@ -1,5 +1,5 @@
 #include "ScoreBoard.h"
-#include "ResourceManager.h"
+#include "FilesManager.h"
 
 
 ScoreBoard::ScoreBoard(sf::Vector2f size, sf::Vector2f pos)
@@ -26,7 +26,7 @@ void ScoreBoard::update(Player* player)
 	m_scoreText.setString("Score: " + std::to_string(player->getScore()));
 	m_lifeText.setString("Life: " + std::to_string(player->getLife()));
 	m_areaText.setString("Area: " + std::to_string(player->getOccupiedAreaPercent()) + "%");
-	m_levelText.setString("Level: " + std::to_string(FilesManager::getInstance().getLevelCount()));
+	m_levelText.setString("Level: " /*+ std::to_string()*/);//TODO: add level number
 }
 
 void ScoreBoard::setPos(sf::Vector2f& pos)

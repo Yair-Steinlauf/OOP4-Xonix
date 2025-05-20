@@ -2,10 +2,9 @@
 #include "GameOverState.h"
 
 
-GamePlayState::GamePlayState(sf::RenderWindow& window, GameStateManager& manager)
-	: m_window(window),
-	m_manager(manager),
-	m_resourceManager(&FilesManager::getInstance()),
+GamePlayState::GamePlayState(sf::RenderWindow* window, GameStateManager* manager, FilesManager* fileManager)
+	:GameState(window, manager),
+	m_resourceManager(fileManager),
 	m_scoreBoard(ScoreBoard(sf::Vector2f(m_resourceManager->getWidth(), 200), sf::Vector2f(0, m_resourceManager->getHeight())))
 {
 	
@@ -42,7 +41,7 @@ void GamePlayState::update(sf::Time dt)
 	m_board.update(dt);
 	m_scoreBoard.update(m_player.get());
 	if (m_player->isFailed()) {
-		m_manager.changeState(std::make_unique<GameOverState>(m_window, m_manager));
+		m_manager->changeState(std::make_unique<GameOverState>(m_window, m_manager));
 	}
 	//else if (m_player->isWon()) {
 	//	m_manager.changeState(std::make_unique<WinState>(m_window, m_manager, m_resourceManager));
@@ -51,8 +50,8 @@ void GamePlayState::update(sf::Time dt)
 
 void GamePlayState::render(sf::RenderWindow& window)
 {
-	m_window.clear();
-	m_board.draw(m_window);
-	m_scoreBoard.draw(m_window);
-	m_window.display();
+	m_window->clear();
+	m_board.draw(*m_window);
+	m_scoreBoard.draw(*m_window);
+	m_window->display();
 }

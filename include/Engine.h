@@ -1,14 +1,17 @@
 #pragma once
+#include "GameState.h"
 #include <SFML/Graphics.hpp>
 #include "Board.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "ResourceManager.h"
+//#include "FilesManager.h"
 #include <vector>
 #include <memory>
 #include "GamePlay.h"
-#include "GameStateManager.h"
-#include "GameState.h"
+
+class FilesManager;
+class GameStateManager;
+//#include "GameStateManager.h"
 
 class Engine{
 public:
@@ -22,7 +25,7 @@ private:
 	//void resetGame();
 	//void drawGameOverScreen();
 	//void drawGame();
-	FilesManager* m_resourceManager;
+	std::unique_ptr<FilesManager >m_resourceManager;
 	GameStateManager m_stateManager;
 	void processEvents();
 	void update();

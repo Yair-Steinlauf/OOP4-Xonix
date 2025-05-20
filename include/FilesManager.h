@@ -16,11 +16,11 @@ public:
 	int getAreaToOccupy(int level)const;
 	int enemyNum(int level) const;
 	int getLevelCount() const;
-	static FilesManager& getInstance();
-private:
-	FilesManager(const FilesManager&) = delete;
+	//static FilesManager& getInstance();
 	FilesManager(std::string path = "levels.txt");
-	FilesManager& operator=(const FilesManager&) = delete;
+private:
+	//FilesManager(const FilesManager&) = delete;
+	//FilesManager& operator=(const FilesManager&) = delete;
 	void readLevels(std::string& path);
 	int m_width, m_height, m_life;
 	std::vector<Level> m_levels;
