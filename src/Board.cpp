@@ -113,11 +113,12 @@ void Board::handleEnemysCollision()
         }
         switch (m_matrix[nextXIndex][nextYIndex].getType()) {
         case Trail:
-            m_player.get()->fail();
+            m_player->decreaseLife();
             break;
         case Occupied:
             changeEnemyDirection(enemy, nextXIndex, nextYIndex);
             break;
+        }
     }
 }
 
@@ -140,18 +141,18 @@ std::shared_ptr<Player> Board::getPlayer()
 void Board::fillEnemysVector(int numOfEnemies)
 {
 	std::set<std::pair<int, int>> usedPositions;
-	int row = 0;
-	int col = 0;
+	int x = 0;
+	int y = 0;
     for (int i = 0; i < numOfEnemies; i++) {
 		//make diffrent random pos for every enemy
         do {
-            col = rand() % (NUM_OF_COLUMS - 2) + 1;
-            row = rand() % (NUM_OF_ROWS - 2) + 1;
-		} while (usedPositions.find(std::make_pair(row, col)) != usedPositions.end());
-        usedPositions.insert(std::make_pair(row, col));
+            x = rand() % (NUM_OF_COLUMS_X - 2) + 1;
+            y = rand() % (NUM_OF_ROWS_Y - 2) + 1;
+		} while (usedPositions.find(std::make_pair(x, y)) != usedPositions.end());
+        usedPositions.insert(std::make_pair(x, y));
 
         //add enemy
-        sf::Vector2i pos(row * m_pixelSize.x, col * m_pixelSize.y);
+        sf::Vector2i pos(x * m_pixelSize.x, y * m_pixelSize.y);
         m_enemys.push_back(std::make_unique<Enemy>(pos, m_pixelSize.x, m_pixelSize.y));
     }
 }
@@ -191,11 +192,8 @@ void Board::floodFill(int x, int y)
         }
     }
     else if (floodFill(x - 1, y, listToDraw)) {
-        for (const auto& cell : listToDraw) {
-            int xx = cell.first;
-            int yy = cell.second;
-            std::cout << xx << ", " << yy << "\n";
-            m_matrix[xx][yy].setType(Type::Occupied);
+        for (const auto& cell : listToDraw) {           
+            m_matrix[cell.first][cell.second].setType(Type::Occupied);
         }
     }
     else if (floodFill(x, y - 1, listToDraw)) {

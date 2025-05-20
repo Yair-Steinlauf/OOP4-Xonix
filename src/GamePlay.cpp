@@ -9,8 +9,8 @@ GamePlayState::GamePlayState(sf::RenderWindow* window, GameStateManager* manager
 {
 	
 	
-	int pixelX = m_resourceManager.getWidth() / NUM_OF_ROWS;
-	int pixelY = m_resourceManager.getHeight() / NUM_OF_COLUMS;
+	int pixelX = m_resourceManager.getWidth() / NUM_OF_COLUMS_X;
+	int pixelY = m_resourceManager.getHeight() / NUM_OF_ROWS_Y;
 
 	m_board = Board(pixelX, pixelY, m_resourceManager.enemyNum(m_level), m_resourceManager.getAreaToOccupy(m_level));
 	m_player = m_board.getPlayer();
@@ -25,7 +25,7 @@ void GamePlayState::handleEvent(sf::Event& event)
 void GamePlayState::nextLevel()
 {
 	m_level++;
-	m_board = Board(m_resourceManager.getWidth() / NUM_OF_ROWS, m_resourceManager.getHeight() / NUM_OF_COLUMS,
+	m_board = Board(m_resourceManager.getWidth() / NUM_OF_COLUMS_X, m_resourceManager.getHeight() / NUM_OF_ROWS_Y,
 		m_resourceManager.enemyNum(m_level), m_resourceManager.getAreaToOccupy(m_level));
 }
 

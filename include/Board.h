@@ -39,7 +39,6 @@ private:
 	std::vector<std::vector<bool>> getMatVis();
 	bool isValid(int x, int y);
 	bool isEnemy(int x, int y);
-	bool floodFillReq(int x, int y, std::vector<std::pair<int,int>> &listOfCellToFill, std::vector<std::vector<bool>>& matFilled, bool isValidToFill);
 	MatrixCell m_matrix;
 	std::vector<std::unique_ptr<Enemy>> m_enemys;
 	std::shared_ptr<Player> m_player;

@@ -5,7 +5,7 @@
 #include "SFML/Graphics.hpp"
 #include "FontManager.h"
 #include "memory"
-
+//TODO: delete
 
 class FilesManager;
 class GamePlayState;
