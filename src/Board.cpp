@@ -127,8 +127,6 @@ void Board::handleEnemysCollision()
             std::cout << "Enemy next x: " << nextXIndex << " y: " << nextYIndex << std::endl;
             std::cout << "Player next x: " << m_player->getNextPosGrid().x << " y: " << m_player->getNextPosGrid().y << std::endl;
             std::cout << "Player curr x: " << m_player->getPosGrid().x << " y: " << m_player->getPosGrid().y << std::endl;
-			//m_matrix[m_player->getNextPosGrid().x][m_player->getNextPosGrid().y].setType(Type::Unoccupied);
-			//m_player->addPointTrail(m_player->getNextPosGrid().x, m_player->getNextPosGrid().y);
             playerFailure();
             break;
         case Occupied:
