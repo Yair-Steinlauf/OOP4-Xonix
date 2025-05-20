@@ -33,6 +33,7 @@ void Player::update(sf::Time time)
 	if (m_has_been_hit) {
 		m_life--;
 		m_rect.setPosition(m_startPos.x, m_startPos.y);
+		m_score -= 10;
 		m_has_been_hit = false;
 	}
 }
@@ -66,7 +67,27 @@ float Player::getOccupiedAreaPercent() const
 
 void Player::addOccupiedAreaPercent(float cellsOccupied)
 {
-	m_occupiedAreaPercent += (cellsOccupied * 100) / NUM_OF_CELLS_UNOCCUPIED;
+	int percent = (cellsOccupied * 100) / NUM_OF_CELLS_UNOCCUPIED;
+
+	m_occupiedAreaPercent += percent;
+	if (percent <= 1)
+		m_score += 1;
+	else if (percent <= 3)
+		m_score += percent;
+	else if(percent <= 6)
+		m_score += percent * 2;
+	else if (percent <= 10)
+		m_score += percent * 3;
+	else if (percent <= 15)
+		m_score += percent * 4;
+	else if (percent <= 25)
+		m_score += percent * 5;
+	else if (percent <= 35)
+		m_score += percent * 6;
+	else if (percent <= 50)
+		m_score += percent * 7;
+	else
+		m_score += percent * 8;
 	// TODO: change score if larger smaller
 }
 
