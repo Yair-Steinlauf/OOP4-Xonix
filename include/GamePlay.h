@@ -9,7 +9,7 @@
 
 class GamePlayState : public GameState {
 public:
-    GamePlayState(sf::RenderWindow* window, GameStateManager* manager, FilesManager* fileManager);
+    GamePlayState(sf::RenderWindow* window, GameStateManager* manager);
 
     void handleEvent(sf::Event& event) override;
 
@@ -17,9 +17,11 @@ public:
     void render(sf::RenderWindow& window) override;
 
 private:
+    void nextLevel();
     void setPlayerDirection();
-    FilesManager* m_resourceManager;
+    FilesManager m_resourceManager;
 	ScoreBoard m_scoreBoard;
     Board m_board;
+    int m_level = 2;
 	std::shared_ptr<Player> m_player;
 };

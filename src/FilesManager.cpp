@@ -21,11 +21,13 @@ int FilesManager::getLife() const
 
 int FilesManager::getAreaToOccupy(int level)const
 {
+	islevelValid(level);
 	return m_levels[level].areaToOccupy;
 }
 
 int FilesManager::enemyNum(int level)const
 {
+	islevelValid(level);
 	return m_levels[level].enemyNum;
 }
 
@@ -34,11 +36,16 @@ int FilesManager::getLevelCount()const
 	return m_levels.size();
 }
 
-//FilesManager& FilesManager::getInstance()
-//{
-//	static FilesManager instance;
-//	return instance;
-//}
+
+
+bool FilesManager::islevelValid(int level) const
+{
+	if (level >= 0 && level < m_levels.size()) {
+		return true;
+	}
+	throw std::out_of_range("Level out of range: " + std::to_string(level));
+	return false;
+}
 
 void FilesManager::readLevels(std::string& path)
 {

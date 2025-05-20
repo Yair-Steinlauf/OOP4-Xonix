@@ -16,7 +16,7 @@ GameOverState::GameOverState(sf::RenderWindow* window, GameStateManager* manager
 void GameOverState::handleEvent(sf::Event& event)
 {
     if (event.key.code == sf::Keyboard::Enter) {
-        //m_manager->changeState(std::make_unique<GamePlayState>(m_window,m_manager)); //start new game
+        m_manager->changeState(std::make_unique<GamePlayState>(m_window,m_manager)); //start new game
     }
 }
 

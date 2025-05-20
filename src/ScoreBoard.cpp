@@ -21,12 +21,12 @@ void ScoreBoard::draw(sf::RenderWindow& window)
 	window.draw(m_levelText);
 }
 
-void ScoreBoard::update(Player* player)
+void ScoreBoard::update(Player* player, int level)
 {
 	m_scoreText.setString("Score: " + std::to_string(player->getScore()));
 	m_lifeText.setString("Life: " + std::to_string(player->getLife()));
 	m_areaText.setString("Area: " + std::to_string(player->getOccupiedAreaPercent()) + "%");
-	m_levelText.setString("Level: " /*+ std::to_string()*/);//TODO: add level number
+	m_levelText.setString("Level: " + std::to_string(level +1));//TODO: add level number
 }
 
 void ScoreBoard::setPos(sf::Vector2f& pos)

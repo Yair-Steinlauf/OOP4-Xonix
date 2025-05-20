@@ -2,17 +2,17 @@
 #include "GameOverState.h"
 
 
-GamePlayState::GamePlayState(sf::RenderWindow* window, GameStateManager* manager, FilesManager* fileManager)
+GamePlayState::GamePlayState(sf::RenderWindow* window, GameStateManager* manager)
 	:GameState(window, manager),
-	m_resourceManager(fileManager),
-	m_scoreBoard(ScoreBoard(sf::Vector2f(m_resourceManager->getWidth(), 200), sf::Vector2f(0, m_resourceManager->getHeight())))
+	m_resourceManager(FilesManager()),
+	m_scoreBoard(ScoreBoard(sf::Vector2f(m_resourceManager.getWidth(), 200), sf::Vector2f(0, m_resourceManager.getHeight())))
 {
 	
 	
-	int pixelX = m_resourceManager->getWidth() / NUM_OF_ROWS;
-	int pixelY = m_resourceManager->getHeight() / NUM_OF_COLUMS;
+	int pixelX = m_resourceManager.getWidth() / NUM_OF_ROWS;
+	int pixelY = m_resourceManager.getHeight() / NUM_OF_COLUMS;
 
-	m_board = Board(pixelX, pixelY, m_resourceManager->enemyNum(0), m_resourceManager->getAreaToOccupy(0));
+	m_board = Board(pixelX, pixelY, m_resourceManager.enemyNum(m_level), m_resourceManager.getAreaToOccupy(m_level));
 	m_player = m_board.getPlayer();
 }
 
@@ -20,6 +20,13 @@ void GamePlayState::handleEvent(sf::Event& event)
 {
 
 	setPlayerDirection();
+}
+
+void GamePlayState::nextLevel()
+{
+	m_level++;
+	m_board = Board(m_resourceManager.getWidth() / NUM_OF_ROWS, m_resourceManager.getHeight() / NUM_OF_COLUMS,
+		m_resourceManager.enemyNum(m_level), m_resourceManager.getAreaToOccupy(m_level));
 }
 
 void GamePlayState::setPlayerDirection()
@@ -39,7 +46,7 @@ void GamePlayState::update(sf::Time dt)
 {
 	m_board.handelCollison();
 	m_board.update(dt);
-	m_scoreBoard.update(m_player.get());
+	m_scoreBoard.update(m_player.get(), m_level);
 	if (m_player->isFailed()) {
 		m_manager->changeState(std::make_unique<GameOverState>(m_window, m_manager));
 	}

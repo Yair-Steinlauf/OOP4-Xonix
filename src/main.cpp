@@ -4,6 +4,7 @@
 
 int main()
 {
+	srand(time(NULL));
 	try {
 		auto engine = Engine();
 		engine.run();

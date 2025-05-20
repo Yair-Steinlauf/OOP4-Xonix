@@ -20,6 +20,6 @@ void MainMenuState::handleEvent(sf::Event& event)
 {
 
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
-		m_manager->pushState(std::make_unique<GamePlayState>(m_window, m_manager, nullptr));
+		//m_manager->pushState(std::make_unique<GamePlayState>(m_window, m_manager, );
 	}
 }

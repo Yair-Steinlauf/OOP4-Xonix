@@ -7,7 +7,7 @@ class ScoreBoard {
 public:
 	ScoreBoard(sf::Vector2f size, sf::Vector2f pos);
 	void draw(sf::RenderWindow& window);
-	void update(Player* player);
+	void update(Player* player, int level);
 private:
 	void setPos(sf::Vector2f& pos);
 	void defineFont();

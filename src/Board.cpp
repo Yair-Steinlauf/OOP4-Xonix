@@ -1,5 +1,5 @@
 ﻿#include "Board.h"
-
+#include "set"
 
 Board::Board(int PixelxSize, int PixelySize, int numOfEnemies, int requierdPercentWin)
 {
@@ -101,25 +101,27 @@ void Board::handleEnemyCollision()
     for (const auto& enemy : m_enemys) {
         int nextRowIndex = enemy->getNextPosGrid().x;
         int nextColIndex = enemy->getNextPosGrid().y;
-
-        switch (m_matrix[nextRowIndex][nextColIndex].getType()) {
-        case Trail:
-            m_player->decreaseLife();
-            break;
-        case Occupied:
-            changeEnemyDirection(enemy, nextColIndex, nextRowIndex);
-            break;
+        if (isInBoardGrid({ nextRowIndex, nextColIndex })) {
+            switch (m_matrix[nextRowIndex][nextColIndex].getType()) {
+            case Trail:
+                m_player->decreaseLife();
+                break;
+            case Occupied:
+                changeEnemyDirection(enemy, nextColIndex, nextRowIndex);
+                break;
+            }
         }
+        else changeEnemyDirection(enemy, nextColIndex, nextRowIndex);
     }
 }
 
 void Board::changeEnemyDirection(const std::unique_ptr<Enemy>& enemy, int col, int row)
 {
     CollisionType collision;
-    if (m_matrix[enemy->getPosGrid().x][col].getType() == Occupied) {
+    if (!isInBoardGrid({ enemy->getPosGrid().x , col}) || m_matrix[enemy->getPosGrid().x][col].getType() == Occupied) {
         collision = CollisionType::Horizontal; 
     }
-    else if (m_matrix[row][enemy->getPosGrid().y].getType() == Occupied)
+    else if (!isInBoardGrid({row, enemy->getPosGrid().y }) || m_matrix[row][enemy->getPosGrid().y].getType() == Occupied)
         collision = CollisionType::Vertical; 
     else
         throw std::runtime_error("No position change detected – invalid collision");
@@ -133,10 +135,19 @@ std::shared_ptr<Player> Board::getPlayer()
 
 void Board::fillEnemysVector(int numOfEnemies)
 {
-    srand(17);
+	std::set<std::pair<int, int>> usedPositions;
+	int row = 0;
+	int col = 0;
     for (int i = 0; i < numOfEnemies; i++) {
-        int col = rand() % (NUM_OF_COLUMS - 2) + 1;
-        int row = rand() % (NUM_OF_ROWS - 2) + 1;
+
+		//make diffrent random pos for every enemy
+        do {
+            col = rand() % (NUM_OF_COLUMS - 2) + 1;
+            row = rand() % (NUM_OF_ROWS - 2) + 1;
+		} while (usedPositions.find(std::make_pair(row, col)) != usedPositions.end());
+        usedPositions.insert(std::make_pair(row, col));
+
+        //add enemy
         sf::Vector2i pos(row * m_pixelSize.x, col * m_pixelSize.y);
         m_enemys.push_back(std::make_unique<Enemy>(pos, m_pixelSize.x, m_pixelSize.y));
     }
