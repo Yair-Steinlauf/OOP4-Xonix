@@ -71,12 +71,14 @@ void Board::handlePlayerColliosion()
         m_matrix[nextXIndex][nextYIndex].setType(Type::Trail);
         m_player->startOccuping();
         m_player->addPointTrail(nextXIndex, nextYIndex);
+		std::cout << "x: " << nextXIndex << " y: " << nextYIndex << std::endl;
         break;
     case Trail:
         //if player moved
         if (m_player->getNextPosGrid() != m_player->getPosGrid())
-            m_player->decreaseLife();
-//             TODO: Fail?
+        {
+            playerFailure();
+        }
         break;
     case Occupied:
         if (m_player->isOccupying()) {
@@ -92,6 +94,17 @@ void Board::handlePlayerColliosion()
         }
         break;
     }
+}
+
+void Board::playerFailure()
+{
+    m_player->decreaseLife();
+	std::vector<sf::Vector2i> trailPoints = m_player->getPointsTrail();
+    for (const auto& cell : trailPoints) {
+        m_matrix[cell.x][cell.y].setType(Type::Unoccupied);
+    }	
+	m_player->setDirection(sf::Vector2i(0, 0));
+    m_player->clearPointsTrail();
 }
 
 bool Board::isInBoardGrid(sf::Vector2i point)
@@ -112,7 +125,8 @@ void Board::handleEnemysCollision()
        
         switch (m_matrix[nextXIndex][nextYIndex].getType()) {
         case Trail:
-            m_player->decreaseLife();
+			//m_player->addPointTrail(m_player->getNextPosGrid().x, m_player->getNextPosGrid().y);
+            playerFailure();
             break;
         case Occupied:
             changeEnemyDirection(enemy, nextXIndex, nextYIndex);

@@ -32,6 +32,7 @@ void Player::update(sf::Time time)
 	m_direction = sf::Vector2i(0, 0);
 	if (m_has_been_hit) {
 		m_life--;
+		m_rect.setPosition(m_startPos.x, m_startPos.y);
 		m_has_been_hit = false;
 	}
 }

@@ -19,11 +19,11 @@ public:
 private:
     void nextLevel();
     void setPlayerDirection();
-    FilesManager m_resourceManager;
-	ScoreBoard m_scoreBoard;
-    Board m_board;
     int m_level = 0;
-	std::unique_ptr<Player> m_player;
+    FilesManager m_resourceManager;
     int m_pixelY;
     int m_pixelX;
+	ScoreBoard m_scoreBoard;
+	std::unique_ptr<Player> m_player;
+    Board m_board;
 };

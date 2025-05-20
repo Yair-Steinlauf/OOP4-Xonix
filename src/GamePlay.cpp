@@ -1,6 +1,6 @@
 #include "GamePlay.h"
 #include "GameOverState.h"
-
+#include "WinState.h"
 
 GamePlayState::GamePlayState(sf::RenderWindow* window, GameStateManager* manager)
 	:GameState(window, manager),
@@ -11,8 +11,7 @@ GamePlayState::GamePlayState(sf::RenderWindow* window, GameStateManager* manager
 	m_player(std::make_unique<Player>(sf::Vector2i(1, 1), m_pixelX, m_pixelY, m_resourceManager.getLife())),
 	m_scoreBoard(ScoreBoard(sf::Vector2f(m_resourceManager.getWidth(), 200), sf::Vector2f(0, m_resourceManager.getHeight()))),
 	m_board(Board(m_player.get(), m_pixelX, m_pixelY, m_resourceManager.enemyNum(m_level), m_resourceManager.getAreaPercentToOccupy(m_level), m_resourceManager.getLife()))
-{
-}
+{}
 
 void GamePlayState::handleEvent(sf::Event& event)
 {
@@ -23,6 +22,10 @@ void GamePlayState::handleEvent(sf::Event& event)
 void GamePlayState::nextLevel()
 {
 	m_level++;
+	if (m_level >= m_resourceManager.getLevelCount()) {
+		m_manager->changeState(std::make_unique<WinState>(m_player->getScore(), m_window, m_manager));
+		return;
+	}
 	m_board = Board(m_player.get(), m_pixelX, m_pixelY,
 		m_resourceManager.enemyNum(m_level), m_resourceManager.getAreaPercentToOccupy(m_level));
 	m_player->resetOccupiedAreaPercent();
@@ -52,9 +55,7 @@ void GamePlayState::update(sf::Time dt)
 	if (m_player->getOccupiedAreaPercent() >= m_resourceManager.getAreaPercentToOccupy(m_level)) {
 		nextLevel();
 	}
-	//else if (m_player->isWon()) {
-	//	m_manager.changeState(std::make_unique<WinState>(m_window, m_manager, m_resourceManager));
-	//}
+
 }
 
 void GamePlayState::render(sf::RenderWindow& window)
