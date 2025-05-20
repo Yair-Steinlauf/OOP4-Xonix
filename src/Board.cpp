@@ -51,9 +51,9 @@ void Board::update(sf::Time time)
 
 void Board::handelCollison()
 {
+    handlePlayerColliosion();
     handleEnemysCollision();
     
-    handlePlayerColliosion();
 
 }
 
@@ -71,7 +71,6 @@ void Board::handlePlayerColliosion()
         m_matrix[nextXIndex][nextYIndex].setType(Type::Trail);
         m_player->startOccuping();
         m_player->addPointTrail(nextXIndex, nextYIndex);
-		std::cout << "x: " << nextXIndex << " y: " << nextYIndex << std::endl;
         break;
     case Trail:
         //if player moved
@@ -125,6 +124,10 @@ void Board::handleEnemysCollision()
        
         switch (m_matrix[nextXIndex][nextYIndex].getType()) {
         case Trail:
+            std::cout << "Enemy next x: " << nextXIndex << " y: " << nextYIndex << std::endl;
+            std::cout << "Player next x: " << m_player->getNextPosGrid().x << " y: " << m_player->getNextPosGrid().y << std::endl;
+            std::cout << "Player curr x: " << m_player->getPosGrid().x << " y: " << m_player->getPosGrid().y << std::endl;
+			//m_matrix[m_player->getNextPosGrid().x][m_player->getNextPosGrid().y].setType(Type::Unoccupied);
 			//m_player->addPointTrail(m_player->getNextPosGrid().x, m_player->getNextPosGrid().y);
             playerFailure();
             break;
@@ -282,7 +285,9 @@ std::vector<std::vector<bool>> Board::getMatVis()
 
 bool Board::isValid(int x, int y)
 {
-
+	//TODO: יש כפל קוד עם isInBoardGrid
+    // 
+    // 
     // If cell lies out of bounds
     if (y <= 1 || y >= NUM_OF_ROWS_Y - 2 || x <= 1 || x >= NUM_OF_COLUMS_X - 2)
         return false;

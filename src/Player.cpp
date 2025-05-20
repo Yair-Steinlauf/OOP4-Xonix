@@ -88,7 +88,6 @@ void Player::addOccupiedAreaPercent(float cellsOccupied)
 		m_score += percent * 7;
 	else
 		m_score += percent * 8;
-	// TODO: change score if larger smaller
 }
 
 void Player::resetOccupiedAreaPercent()
