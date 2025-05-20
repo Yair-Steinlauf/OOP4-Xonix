@@ -13,9 +13,9 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 	int getLife() const;
-	int getAreaToOccupy(int level);
-	int enemyNum(int level);
-	int getLevelCount();
+	int getAreaToOccupy(int level)const;
+	int enemyNum(int level) const;
+	int getLevelCount() const;
 	static FilesManager& getInstance();
 private:
 	FilesManager(const FilesManager&) = delete;

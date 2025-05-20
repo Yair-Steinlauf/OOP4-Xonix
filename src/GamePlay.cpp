@@ -1,12 +1,15 @@
 #include "GamePlay.h"
 #include "GameOverState.h"
 
+
 GamePlayState::GamePlayState(sf::RenderWindow& window, GameStateManager& manager)
 	: m_window(window),
 	m_manager(manager),
-	m_scoreBoard(ScoreBoard(sf::Vector2f(200, 200), sf::Vector2f(10, 10)))
+	m_resourceManager(&FilesManager::getInstance()),
+	m_scoreBoard(ScoreBoard(sf::Vector2f(m_resourceManager->getWidth(), 200), sf::Vector2f(0, m_resourceManager->getHeight())))
 {
-	m_resourceManager = &FilesManager::getInstance();
+	
+	
 	int pixelX = m_resourceManager->getWidth() / NUM_OF_ROWS;
 	int pixelY = m_resourceManager->getHeight() / NUM_OF_COLUMS;
 
@@ -50,5 +53,6 @@ void GamePlayState::render(sf::RenderWindow& window)
 {
 	m_window.clear();
 	m_board.draw(m_window);
+	m_scoreBoard.draw(m_window);
 	m_window.display();
 }

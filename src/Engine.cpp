@@ -2,6 +2,7 @@
 #include "Types.h"
 #include <iostream>
 
+const sf::Vector2f ScoreBoardPadding = sf::Vector2f(0, 200);
 
 Engine::Engine()
 {
@@ -10,7 +11,7 @@ Engine::Engine()
 
 void Engine::run()
 {	
-	m_window.create(sf::VideoMode(m_resourceManager->getWidth(), m_resourceManager->getHeight()), "Xonix");
+	m_window.create(sf::VideoMode(m_resourceManager->getWidth(), m_resourceManager->getHeight() + ScoreBoardPadding.y), "Xonix");
 	m_window.setFramerateLimit(60u);
 	
 	sf::Time elapsed = sf::Time::Zero;

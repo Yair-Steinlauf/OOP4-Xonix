@@ -19,17 +19,17 @@ int FilesManager::getLife() const
 	return getInstance().m_life;
 }
 
-int FilesManager::getAreaToOccupy(int level)
+int FilesManager::getAreaToOccupy(int level)const
 {
 	return getInstance().m_levels[level].areaToOccupy;
 }
 
-int FilesManager::enemyNum(int level)
+int FilesManager::enemyNum(int level)const
 {
 	return getInstance().m_levels[level].enemyNum;
 }
 
-int FilesManager::getLevelCount()
+int FilesManager::getLevelCount()const
 {
 	return getInstance().m_levels.size();
 }

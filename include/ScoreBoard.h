@@ -18,6 +18,8 @@ private:
 	sf::Text m_scoreText;
 	sf::Text m_lifeText;
 	sf::Text m_areaText;
+	sf::Text m_levelText;
+
 
 
 };
