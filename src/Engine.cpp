@@ -5,8 +5,8 @@
 Engine::Engine()
 {
 	m_resourceManager = ResourceManager("levels.txt");
-	int pixelX = m_resourceManager.getWidth() / NUM_OF_ROWS;
-	int pixelY = m_resourceManager.getHeight() / NUM_OF_COLUMS;
+	int pixelX = m_resourceManager.getWidth() / NUM_OF_COLUMS_X;	
+	int pixelY = m_resourceManager.getHeight() / NUM_OF_ROWS_Y;
 
 	m_board = Board(pixelX, pixelY, m_resourceManager.enemyNum(0), m_resourceManager.getAreaToOccupy(0));
 	m_player = m_board.getPlayer();
@@ -20,8 +20,6 @@ void Engine::run()
 	sf::Time elapsed = sf::Time::Zero;
 	while (m_window.isOpen())
 	{
-
-
 		processEvents();
 		elapsed += m_clock.restart();
 		if (elapsed >= sf::microseconds(20000)) {
@@ -29,10 +27,7 @@ void Engine::run()
 			handleCollision();
 			update();
 			elapsed = sf::microseconds(0);
-		}
-
-	
-			
+		}				
 		render();
 	}
 	/*std::cout << m_resourceManager.getWidth() << " " << m_resourceManager.getWidth() << " " << m_resourceManager.getLife() << '\n';
