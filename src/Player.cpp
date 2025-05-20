@@ -66,3 +66,18 @@ int Player::getOccupiedAreaPercent() const
 {
 	return m_occupiedAreaPercent;
 }
+
+void Player::addPointTrail(int x, int y)
+{
+	m_trailPoints.push_back(sf::Vector2i(x, y));
+}
+
+std::vector<sf::Vector2i> Player::getPointsTrail()
+{
+	return m_trailPoints;
+}
+
+void Player::clearPointsTrail()
+{
+	m_trailPoints.clear();
+}

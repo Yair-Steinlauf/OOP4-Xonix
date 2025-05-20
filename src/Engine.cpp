@@ -7,7 +7,7 @@ const sf::Vector2f ScoreBoardPadding = sf::Vector2f(0, 200);
 Engine::Engine()
 	:m_resourceManager(std::make_unique<FilesManager>())
 {
-	m_stateManager.pushState(std::make_unique<GamePlayState>(&m_window, &m_stateManager));//, m_resourceManager.get()));
+	m_stateManager.pushState(std::make_unique<GamePlayState>(&m_window, &m_stateManager));
 }
 
 void Engine::run()
@@ -18,17 +18,12 @@ void Engine::run()
 	sf::Time elapsed = sf::Time::Zero;
 	while (m_window.isOpen())
 	{
-
-
 		processEvents();
 		elapsed += m_clock.restart();
 		if (elapsed >= sf::microseconds(20000)) {
 			update();
 			elapsed = sf::microseconds(0);
-		}
-
-	
-			
+		}				
 		render();
 	}
 }
