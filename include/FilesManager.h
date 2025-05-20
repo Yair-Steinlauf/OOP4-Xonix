@@ -13,7 +13,7 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 	int getLife() const;
-	int getAreaToOccupy(int level)const;
+	int getAreaPercentToOccupy(int level)const;
 	int enemyNum(int level) const;
 	int getLevelCount() const;
 	FilesManager(std::string path = "levels.txt");

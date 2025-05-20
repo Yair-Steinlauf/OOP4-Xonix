@@ -19,7 +19,7 @@ int FilesManager::getLife() const
 	return m_life;
 }
 
-int FilesManager::getAreaToOccupy(int level)const
+int FilesManager::getAreaPercentToOccupy(int level)const
 {
 	islevelValid(level);
 	return m_levels[level].areaToOccupy;

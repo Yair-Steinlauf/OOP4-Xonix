@@ -1,10 +1,11 @@
 #include "Player.h"
 #include "iostream"
-Player::Player(sf::Vector2i startPos, int pixelSizeX, int pixelSizeY) : 
-	MovingObject(startPos, PLAYER_SPEED,pixelSizeX, pixelSizeY), m_startPos(startPos)
+Player::Player(sf::Vector2i startPos, int pixelSizeX, int pixelSizeY, int life) :
+	MovingObject(startPos, PLAYER_SPEED,pixelSizeX, pixelSizeY), m_startPos(startPos),  m_life(life)
 {
 	m_rect.setPosition(sf::Vector2f(startPos.x, startPos.y));
 	m_rect.setFillColor(sf::Color::White);
+	m_life = life;
 
 	
 }
@@ -41,11 +42,6 @@ void Player::decreaseLife()
 	m_has_been_hit = true;
 }
 
-bool Player::isWon() const
-{
-	return m_occupiedAreaPercent >= 80;
-}
-
 bool Player::isFailed() const
 {
 	//std::cout << "Player life: " << m_life << std::endl;
@@ -62,9 +58,20 @@ int Player::getScore() const
 	return m_score;
 }
 
-int Player::getOccupiedAreaPercent() const
+float Player::getOccupiedAreaPercent() const
 {
 	return m_occupiedAreaPercent;
+}
+
+void Player::addOccupiedAreaPercent(float cellsOccupied)
+{
+	m_occupiedAreaPercent += (cellsOccupied * 100) / NUM_OF_CELLS_UNOCCUPIED;
+	// TODO: change score if larger smaller
+}
+
+void Player::resetOccupiedAreaPercent()
+{
+	m_occupiedAreaPercent = 0;
 }
 
 void Player::addPointTrail(int x, int y)

@@ -22,6 +22,8 @@ private:
     FilesManager m_resourceManager;
 	ScoreBoard m_scoreBoard;
     Board m_board;
-    int m_level = 2;
-	std::shared_ptr<Player> m_player;
+    int m_level = 0;
+	std::unique_ptr<Player> m_player;
+    int m_pixelY;
+    int m_pixelX;
 };

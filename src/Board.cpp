@@ -2,13 +2,13 @@
 #include <queue>
 #include "set"
 
-Board::Board(int PixelxSize, int PixelySize, int numOfEnemies, int requierdPercentWin)
+Board::Board(Player* player, int PixelxSize, int PixelySize, int numOfEnemies, int requierdPercentWin, int life)
+	:m_player(player)
 {
     m_pixelSize.x = PixelxSize;
     m_pixelSize.y = PixelySize;
 	initBoard();
     fillEnemysVector(numOfEnemies);
-    m_player = std::make_shared<Player>(sf::Vector2i(0,0), m_pixelSize.x, m_pixelSize.y);
 }
 
 
@@ -60,17 +60,17 @@ void Board::handelCollison()
 
 void Board::handlePlayerColliosion()
 {
-    if (!isInBoardGrid(m_player.get()->getNextPosGrid()))
-        m_player.get()->setDirection(sf::Vector2i(0, 0));
+    if (!isInBoardGrid(m_player->getNextPosGrid()))
+        m_player->setDirection(sf::Vector2i(0, 0));
 
-    int nextXIndex = m_player.get()->getNextPosGrid().x;
-    int nextYIndex = m_player.get()->getNextPosGrid().y;   
-    sf::Vector2i curPos(m_player.get()->getPos().x, m_player.get()->getPos().y);
+    int nextXIndex = m_player->getNextPosGrid().x;
+    int nextYIndex = m_player->getNextPosGrid().y;   
+    sf::Vector2i curPos(m_player->getPos().x, m_player->getPos().y);
     switch (m_matrix[nextXIndex][nextYIndex].getType()) {
     case Unoccupied:
         m_matrix[nextXIndex][nextYIndex].setType(Type::Trail);
-        m_player.get()->startOccuping();
-        m_player.get()->addPointTrail(nextXIndex, nextYIndex);
+        m_player->startOccuping();
+        m_player->addPointTrail(nextXIndex, nextYIndex);
         break;
     case Trail:
         //if player moved
@@ -79,14 +79,15 @@ void Board::handlePlayerColliosion()
 //             TODO: Fail?
         break;
     case Occupied:
-        if (m_player.get()->isOccupying()) {
-            m_player.get()->stopOccuping();            
-            int curX = m_player.get()->getPosGrid().x;
-            int curY = m_player.get()->getPosGrid().y;
-            for (const auto& cell : m_player.get()->getPointsTrail()) {
+        if (m_player->isOccupying()) {
+            m_player->stopOccuping();            
+            int curX = m_player->getPosGrid().x;
+            int curY = m_player->getPosGrid().y;
+            for (const auto& cell : m_player->getPointsTrail()) {
                 m_matrix[cell.x][cell.y].setType(Type::Occupied);
             }
-            m_player.get()->clearPointsTrail();
+            m_player->addOccupiedAreaPercent(m_player->getPointsTrail().size());
+            m_player->clearPointsTrail();
             floodFill(curX, curY);
         }
         break;
@@ -108,9 +109,7 @@ void Board::handleEnemysCollision()
         int nextXIndex = enemy.get()->getNextPosGrid().x;
         int nextYIndex = enemy.get()->getNextPosGrid().y;
 
-        if (nextYIndex < 1 || nextYIndex > NUM_OF_ROWS_Y - 2 || nextXIndex < 1 || nextXIndex > NUM_OF_COLUMS_X - 2) {
-            std::cout << "here: " << nextXIndex << ", " << nextYIndex << "\n";
-        }
+       
         switch (m_matrix[nextXIndex][nextYIndex].getType()) {
         case Trail:
             m_player->decreaseLife();
@@ -133,7 +132,7 @@ void Board::changeEnemyDirection(const std::unique_ptr<Enemy>& enemy, int x, int
         enemy.get()->changeDirection(CollisionType::Vertical);
 }
 
-std::shared_ptr<Player> Board::getPlayer()
+Player* Board::getPlayer()
 {
     return m_player;
 }
@@ -159,7 +158,7 @@ void Board::fillEnemysVector(int numOfEnemies)
 
 void Board::initBoard()
 {
-   
+    
     for (int x = 0; x < NUM_OF_COLUMS_X; x++)
     {
         std::vector<Cell> cellOnY;
@@ -180,27 +179,23 @@ void Board::initBoard()
 
 void Board::floodFill(int x, int y)
 {
-    std::vector<std::pair<int, int>> listToDraw;
-    if (floodFill(x + 1, y, listToDraw)) {
-        for (const auto& cell : listToDraw) {
-            m_matrix[cell.first][cell.second].setType(Type::Occupied);
-        }
+    std::vector<std::pair<int, int>> cellsToDraw;
+    if (floodFill(x + 1, y, cellsToDraw)) {
+        occupyList(cellsToDraw);
     }
-    else if (floodFill(x, y + 1, listToDraw)) {
-        for (const auto& cell : listToDraw) {
-            m_matrix[cell.first][cell.second].setType(Type::Occupied);
-        }
+    else if (floodFill(x, y + 1, cellsToDraw)) {
+        occupyList(cellsToDraw);
+
     }
-    else if (floodFill(x - 1, y, listToDraw)) {
-        for (const auto& cell : listToDraw) {           
-            m_matrix[cell.first][cell.second].setType(Type::Occupied);
-        }
+    else if (floodFill(x - 1, y, cellsToDraw)) {
+        occupyList(cellsToDraw);
+
     }
-    else if (floodFill(x, y - 1, listToDraw)) {
-        for (const auto& cell : listToDraw) {
-            m_matrix[cell.first][cell.second].setType(Type::Occupied);
-        }
+    else if (floodFill(x, y - 1, cellsToDraw)) {
+        occupyList(cellsToDraw);
     }
+	m_player->addOccupiedAreaPercent(cellsToDraw.size());
+
 
 
     
@@ -208,7 +203,14 @@ void Board::floodFill(int x, int y)
     
 }
 
-bool Board::floodFill(int x, int y, std::vector<std::pair<int, int>>& listToDraw)
+void Board::occupyList(std::vector<std::pair<int, int>>& cellsToDraw)
+{
+    for (const auto& cell : cellsToDraw) {
+        m_matrix[cell.first][cell.second].setType(Type::Occupied);
+    }
+}
+
+bool Board::floodFill(int x, int y, std::vector<std::pair<int, int>>& cellsToDraw)
 {
     if (!isValid(x, y)) {
         return false;
@@ -220,7 +222,7 @@ bool Board::floodFill(int x, int y, std::vector<std::pair<int, int>>& listToDraw
     std::vector<std::vector<bool>> matVis = getMatVis();
 
     q.push({ x,y });
-    listToDraw.push_back({ x,y });
+    cellsToDraw.push_back({ x,y });
     matVis[x][y] = true;
 
     while (!q.empty()) {
@@ -236,10 +238,10 @@ bool Board::floodFill(int x, int y, std::vector<std::pair<int, int>>& listToDraw
             if (isValid(adjx, adjy) && !matVis[adjx][adjy]) {
                 q.push({ adjx, adjy });
                 matVis[adjx][adjy] = true;
-                listToDraw.push_back({ adjx,adjy });
+                cellsToDraw.push_back({ adjx,adjy });
             }
             if (isEnemy(adjx, adjy)) {
-                listToDraw.clear();
+                cellsToDraw.clear();
                 return false;
             }
         }
