@@ -22,6 +22,8 @@ public:
 	float getOccupiedAreaPercent() const;
 	void addOccupiedAreaPercent(float cellsOccupied);
 	void resetOccupiedAreaPercent();
+	void moveToStartPos();
+
 private:
 	int m_life = 3;
 	int m_score = 0;

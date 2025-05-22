@@ -10,6 +10,7 @@
 #include "vector"
 #include <memory>
 #include <iostream>
+#include "list"
 
 
 
@@ -35,10 +36,10 @@ private:
 	void fillEnemysVector(int numOfEnemies);
 	void initBoard();
 	void floodFill(int x, int y);
-	void occupyList(std::vector<std::pair<int, int>>& cellsToDraw);
-	bool floodFill(int x, int y, std::vector<std::pair<int, int>>& cellsToDraw);
+	void occupyList(std::list<std::pair<int, int>>& cellsToDraw);
+	bool floodFill(int x, int y, std::list<std::pair<int, int>>& cellsToDraw);
 	std::vector<std::vector<bool>> getMatVis();
-	bool isValid(int x, int y);
+	bool canBeFilled(int x, int y);
 	bool isEnemy(int x, int y);
 	MatrixCell m_matrix;
 	std::vector<std::unique_ptr<Enemy>> m_enemys;

@@ -32,7 +32,7 @@ void Player::update(sf::Time time)
 	m_direction = sf::Vector2i(0, 0);
 	if (m_has_been_hit) {
 		m_life--;
-		m_rect.setPosition(m_startPos.x, m_startPos.y);
+		moveToStartPos();
 		m_score -= 10;
 		m_has_been_hit = false;
 	}
@@ -95,6 +95,11 @@ void Player::resetOccupiedAreaPercent()
 	m_occupiedAreaPercent = 0;
 }
 
+void Player::moveToStartPos()
+{
+	m_rect.setPosition(m_startPos.x, m_startPos.y);
+}
+
 void Player::addPointTrail(int x, int y)
 {
 	m_trailPoints.push_back(sf::Vector2i(x, y));
@@ -107,5 +112,7 @@ std::vector<sf::Vector2i> Player::getPointsTrail()
 
 void Player::clearPointsTrail()
 {
+	if(m_trailPoints.empty())
+		return;
 	m_trailPoints.clear();
 }

@@ -1,7 +1,6 @@
 ﻿#include "Board.h"
 #include <queue>
 #include "set"
-
 Board::Board(Player* player, int PixelxSize, int PixelySize, int numOfEnemies, int requierdPercentWin, int life)
 	:m_player(player)
 {
@@ -41,7 +40,8 @@ void Board::draw(sf::RenderWindow& window)
 
 void Board::update(sf::Time time)
 {
-    //update enemys
+    //update e
+    // nemys
     for (const auto& enemy : m_enemys) {
         enemy->update(time);
     }
@@ -86,10 +86,12 @@ void Board::handlePlayerColliosion()
             int curY = m_player->getPosGrid().y;
             for (const auto& cell : m_player->getPointsTrail()) {
                 m_matrix[cell.x][cell.y].setType(Type::Occupied);
+            }     
+            if (m_player->getPointsTrail().size() > 0) {
+                m_player->addOccupiedAreaPercent(m_player->getPointsTrail().size());
+                floodFill(curX, curY);
+                m_player->clearPointsTrail();
             }
-            m_player->addOccupiedAreaPercent(m_player->getPointsTrail().size());
-            m_player->clearPointsTrail();
-            floodFill(curX, curY);
         }
         break;
     }
@@ -124,9 +126,6 @@ void Board::handleEnemysCollision()
        
         switch (m_matrix[nextXIndex][nextYIndex].getType()) {
         case Trail:
-            std::cout << "Enemy next x: " << nextXIndex << " y: " << nextYIndex << std::endl;
-            std::cout << "Player next x: " << m_player->getNextPosGrid().x << " y: " << m_player->getNextPosGrid().y << std::endl;
-            std::cout << "Player curr x: " << m_player->getPosGrid().x << " y: " << m_player->getPosGrid().y << std::endl;
             playerFailure();
             break;
         case Occupied:
@@ -194,23 +193,35 @@ void Board::initBoard()
 
 void Board::floodFill(int x, int y)
 {
-    std::vector<std::pair<int, int>> cellsToDraw;
-    if (floodFill(x + 1, y, cellsToDraw)) {
-        occupyList(cellsToDraw);
+    bool isYetFilled = true;
+    int indexTrail = m_player->getPointsTrail().size();
+    while(isYetFilled && indexTrail > 0){
+        std::list<std::pair<int, int>> cellsToDraw;
+        if (floodFill(x + 1, y, cellsToDraw)) {
+            occupyList(cellsToDraw);
+            isYetFilled = false;
+        }
+        else if (floodFill(x, y + 1, cellsToDraw)) {
+            occupyList(cellsToDraw);
+            isYetFilled = false;
+        }
+        else if (floodFill(x - 1, y, cellsToDraw)) {
+            occupyList(cellsToDraw);
+            isYetFilled = false;
+        }
+        else if (floodFill(x, y - 1, cellsToDraw)) {
+            occupyList(cellsToDraw);
+            isYetFilled = false;
+        }
+        if (!isYetFilled) {
+            m_player->addOccupiedAreaPercent(cellsToDraw.size());
+        }
+        else {
+            indexTrail--;
+            x = m_player->getPointsTrail()[indexTrail].x;
+            y = m_player->getPointsTrail()[indexTrail].y;
+        }
     }
-    else if (floodFill(x, y + 1, cellsToDraw)) {
-        occupyList(cellsToDraw);
-
-    }
-    else if (floodFill(x - 1, y, cellsToDraw)) {
-        occupyList(cellsToDraw);
-
-    }
-    else if (floodFill(x, y - 1, cellsToDraw)) {
-        occupyList(cellsToDraw);
-    }
-	m_player->addOccupiedAreaPercent(cellsToDraw.size());
-
 
 
     
@@ -218,16 +229,16 @@ void Board::floodFill(int x, int y)
     
 }
 
-void Board::occupyList(std::vector<std::pair<int, int>>& cellsToDraw)
+void Board::occupyList(std::list<std::pair<int, int>>& cellsToDraw)
 {
     for (const auto& cell : cellsToDraw) {
         m_matrix[cell.first][cell.second].setType(Type::Occupied);
     }
 }
 
-bool Board::floodFill(int x, int y, std::vector<std::pair<int, int>>& cellsToDraw)
+bool Board::floodFill(int x, int y, std::list<std::pair<int, int>>& cellsToDraw)
 {
-    if (!isValid(x, y)) {
+    if (!canBeFilled(x, y)) {
         return false;
     }
     int dRow[] = { -1, 0, 1, 0 };
@@ -250,7 +261,7 @@ bool Board::floodFill(int x, int y, std::vector<std::pair<int, int>>& cellsToDra
 
             int adjx = x + dRow[i];
             int adjy = y + dCol[i];
-            if (isValid(adjx, adjy) && !matVis[adjx][adjy]) {
+            if (canBeFilled(adjx, adjy) && !matVis[adjx][adjy]) {
                 q.push({ adjx, adjy });
                 matVis[adjx][adjy] = true;
                 cellsToDraw.push_back({ adjx,adjy });
@@ -281,24 +292,16 @@ std::vector<std::vector<bool>> Board::getMatVis()
 
 
 
-bool Board::isValid(int x, int y)
+bool Board::canBeFilled(int x, int y)
 {
-	//TODO: יש כפל קוד עם isInBoardGrid
-    // 
-    // 
-    // If cell lies out of bounds
-    if (y <= 1 || y >= NUM_OF_ROWS_Y - 2 || x <= 1 || x >= NUM_OF_COLUMS_X - 2)
+    if (!isInBoardGrid(sf::Vector2i(x,y)))
         return false;
 
 
-
-    // if cell is Occupied or trail
     Type type = m_matrix[x][y].getType();
     if (type == Type::Occupied || type == Type::Trail)
         return false;
     
-
-    // Otherwise
     return true;
 }
 

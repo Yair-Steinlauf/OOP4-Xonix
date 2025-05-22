@@ -29,6 +29,7 @@ void GamePlayState::nextLevel()
 	m_board = Board(m_player.get(), m_pixelX, m_pixelY,
 		m_resourceManager.enemyNum(m_level), m_resourceManager.getAreaPercentToOccupy(m_level));
 	m_player->resetOccupiedAreaPercent();
+	m_board.getPlayer()->moveToStartPos();
 }
 
 void GamePlayState::setPlayerDirection()
@@ -49,11 +50,11 @@ void GamePlayState::update(sf::Time dt)
 	m_board.handelCollison();
 	m_board.update(dt);
 	m_scoreBoard.update(m_player.get(), m_level);
-	if (m_player->isFailed()) {
-		m_manager->changeState(std::make_unique<GameOverState>(m_window, m_manager));
-	}
 	if (m_player->getOccupiedAreaPercent() >= m_resourceManager.getAreaPercentToOccupy(m_level)) {
 		nextLevel();
+	}
+	else if (m_player->isFailed()) {
+		m_manager->changeState(std::make_unique<GameOverState>(m_window, m_manager));
 	}
 
 }

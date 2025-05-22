@@ -14,4 +14,5 @@ public:
 protected:
     sf::RenderWindow* m_window;
     GameStateManager* m_manager;
+    void centerText(sf::Text& text, float y);
 };

@@ -14,7 +14,8 @@ public:
 	void update(sf::Time dt) override {}
 	void render(sf::RenderWindow& window) override;
 private:
-
+	sf::RectangleShape m_background;
 	sf::Text m_title;
 	sf::Text m_subTitle;
+	sf::Text m_instruction;
 };
