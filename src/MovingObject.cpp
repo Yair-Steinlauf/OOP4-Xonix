@@ -1,7 +1,7 @@
 #include "MovingObject.h"
 #include <iostream>
 
-MovingObject::MovingObject(sf::Vector2i pos, int speed, int pixelSizeX, int pixelSizeY, sf::Vector2i direction) : GameObject(pos, pixelSizeX, pixelSizeY), m_speed(speed), m_direction(direction)
+MovingObject::MovingObject(sf::Vector2i pos, int speed, int pixelSizeX, int pixelSizeY, sf::Vector2i direction) : GameObject(pos, pixelSizeX, pixelSizeY), m_direction(direction)
 
 {
 }
