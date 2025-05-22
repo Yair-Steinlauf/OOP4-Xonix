@@ -39,14 +39,12 @@ void Player::update(sf::Time time)
 }
 
 void Player::decreaseLife()
-{
-	std::cout << "Player life: " << m_life << std::endl;
+{	
 	m_has_been_hit = true;
 }
 
 bool Player::isFailed() const
-{
-	//std::cout << "Player life: " << m_life << std::endl;
+{	
 	return m_life <= 0;
 }
 

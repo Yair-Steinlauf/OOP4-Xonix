@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-//#include "GameStateManager.h"
 class GameStateManager;
 
 class GameState {

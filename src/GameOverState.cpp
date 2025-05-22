@@ -10,7 +10,7 @@ GameOverState::GameOverState(sf::RenderWindow* window, GameStateManager* manager
     const sf::Font& font = FontManager::getInstance().getFont();
 
     m_background.setSize(sf::Vector2f(window->getSize()));
-    m_background.setFillColor(sf::Color(30, 144, 255, 80));  // כחול שקוף
+    m_background.setFillColor(sf::Color(30, 144, 255, 80)); 
 
     m_title.setFont(font);
     m_title.setString("Game Over");

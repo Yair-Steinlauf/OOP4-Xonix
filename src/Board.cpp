@@ -40,8 +40,7 @@ void Board::draw(sf::RenderWindow& window)
 
 void Board::update(sf::Time time)
 {
-    //update e
-    // nemys
+    //update enemys
     for (const auto& enemy : m_enemys) {
         enemy->update(time);
     }
@@ -193,30 +192,23 @@ void Board::initBoard()
 
 void Board::floodFill(int x, int y)
 {
-    bool isYetFilled = true;
+    int dRow[] = { -1, 0, 1, 0 };
+    int dCol[] = { 0, 1, 0, -1 };
+    bool isFilled = false;
     int indexTrail = m_player->getPointsTrail().size();
-    while(isYetFilled && indexTrail > 0){
-        std::list<std::pair<int, int>> cellsToDraw;
-        if (floodFill(x + 1, y, cellsToDraw)) {
-            occupyList(cellsToDraw);
-            isYetFilled = false;
+    std::list<std::pair<int, int>> cellsToDraw;
+    while(!isFilled && indexTrail > 0){
+        for (int i = 0; i < 4 && !isFilled; i++)
+        {
+            int adjx = x + dRow[i];
+            int adjy = y + dCol[i];
+            if (floodFill(adjx, adjy, cellsToDraw)) {
+                occupyList(cellsToDraw);
+                m_player->addOccupiedAreaPercent(cellsToDraw.size());
+                isFilled = true;
+            }
         }
-        else if (floodFill(x, y + 1, cellsToDraw)) {
-            occupyList(cellsToDraw);
-            isYetFilled = false;
-        }
-        else if (floodFill(x - 1, y, cellsToDraw)) {
-            occupyList(cellsToDraw);
-            isYetFilled = false;
-        }
-        else if (floodFill(x, y - 1, cellsToDraw)) {
-            occupyList(cellsToDraw);
-            isYetFilled = false;
-        }
-        if (!isYetFilled) {
-            m_player->addOccupiedAreaPercent(cellsToDraw.size());
-        }
-        else {
+        if(!isFilled) {
             indexTrail--;
             x = m_player->getPointsTrail()[indexTrail].x;
             y = m_player->getPointsTrail()[indexTrail].y;
@@ -257,8 +249,7 @@ bool Board::floodFill(int x, int y, std::list<std::pair<int, int>>& cellsToDraw)
         y = cell.second;
         q.pop();
         for (int i = 0; i < 4; i++)
-        {    // If cell is already visited
-
+        {   
             int adjx = x + dRow[i];
             int adjy = y + dCol[i];
             if (canBeFilled(adjx, adjy) && !matVis[adjx][adjy]) {

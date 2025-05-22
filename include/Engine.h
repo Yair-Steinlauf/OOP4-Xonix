@@ -4,14 +4,13 @@
 #include "Board.h"
 #include "Player.h"
 #include "Enemy.h"
-//#include "FilesManager.h"
 #include <vector>
 #include <memory>
 #include "GamePlay.h"
 
 class FilesManager;
 class GameStateManager;
-//#include "GameStateManager.h"
+
 
 class Engine{
 public:
@@ -22,9 +21,6 @@ private:
 	sf::RenderWindow m_window;
 	sf::Event m_event;
 	sf::Clock m_clock;
-	//void resetGame();
-	//void drawGameOverScreen();
-	//void drawGame();
 	std::unique_ptr<FilesManager >m_resourceManager;
 	GameStateManager m_stateManager;
 	void processEvents();

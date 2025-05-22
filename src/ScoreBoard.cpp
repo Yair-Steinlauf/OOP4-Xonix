@@ -26,7 +26,7 @@ void ScoreBoard::update(Player* player, int level)
 	m_scoreText.setString("Score: " + std::to_string(player->getScore()));
 	m_lifeText.setString("Life: " + std::to_string(player->getLife()));
 	m_areaText.setString("Area: " + std::to_string(player->getOccupiedAreaPercent()).substr(0, 3) + "%");
-	m_levelText.setString("Level: " + std::to_string(level +1));//TODO: add level number
+	m_levelText.setString("Level: " + std::to_string(level +1));
 }
 
 void ScoreBoard::setPos(sf::Vector2f& pos)

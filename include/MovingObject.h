@@ -13,8 +13,7 @@ public:
 	virtual ~MovingObject() = default;
 
 protected:
-	sf::Vector2i m_direction;
-	int m_speed = 0;	// TODO: maybe delete
+	sf::Vector2i m_direction;	
 	sf::Time m_moveTimer = sf::microseconds(0);
 
 };
