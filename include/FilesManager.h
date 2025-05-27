@@ -8,17 +8,17 @@ struct Level {
 	int enemyNum;
 };
 
-class ResourceManager {
+class FilesManager {
 public:
-	ResourceManager(std::string path = "levels.txt");
 	int getWidth() const;
 	int getHeight() const;
 	int getLife() const;
-	int getAreaToOccupy(int level);
-	int enemyNum(int level);
-	int getLevelCount();
-
+	int getAreaPercentToOccupy(int level)const;
+	int enemyNum(int level) const;
+	int getLevelCount() const;
+	FilesManager(std::string path = "levels.txt");
 private:
+	bool islevelValid(int level) const;
 	void readLevels(std::string& path);
 	int m_width, m_height, m_life;
 	std::vector<Level> m_levels;

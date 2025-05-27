@@ -10,6 +10,7 @@
 #include "vector"
 #include <memory>
 #include <iostream>
+#include "list"
 
 
 
@@ -19,11 +20,11 @@ using MatrixCell = std::vector<std::vector<Cell>> ;
 
 class Board {
 public:
-	Board(int PixelxSize = 0, int PixelySize = 0, int numOfEnemies = 1 ,int requierdPercentWin = 80);
+	Board(Player* player, int PixelxSize = 0, int PixelySize = 0, int numOfEnemies = 1, int requierdPercentWin = 80, int life = 3);
 	void draw(sf::RenderWindow& window);
 	void update(sf::Time time);
 	void handelCollison();
-	std::shared_ptr<Player> getPlayer();
+	Player* getPlayer();
 private:
 	sf::Vector2f gridToSfml(int row, int col);
 	sf::Vector2i sfmlToGrid(sf::Vector2f pos);
@@ -31,17 +32,18 @@ private:
 	void changeEnemyDirection(const std::unique_ptr<Enemy>& enemy, int col, int row);
 	bool isInBoardGrid(sf::Vector2i point);
 	void handlePlayerColliosion();
+	void playerFailure();
 	void fillEnemysVector(int numOfEnemies);
 	void initBoard();
 	void floodFill(int x, int y);
-	bool floodFill(int x, int y, std::vector<std::pair<int, int>>& listToDraw);
+	void occupyList(std::list<std::pair<int, int>>& cellsToDraw);
+	bool floodFill(int x, int y, std::list<std::pair<int, int>>& cellsToDraw);
 	std::vector<std::vector<bool>> getMatVis();
-	bool isValid(int x, int y);
+	bool canBeFilled(int x, int y);
 	bool isEnemy(int x, int y);
-	bool floodFillReq(int x, int y, std::vector<std::pair<int,int>> &listOfCellToFill, std::vector<std::vector<bool>>& matFilled, bool isValidToFill);
 	MatrixCell m_matrix;
 	std::vector<std::unique_ptr<Enemy>> m_enemys;
-	std::shared_ptr<Player> m_player;
+	Player* m_player;
 	sf::Vector2i m_pixelSize;
 
 };

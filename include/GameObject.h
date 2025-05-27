@@ -15,7 +15,7 @@ public:
 	sf::Vector2f getPos() const;
 	virtual void update(sf::Time time) {};
 
-
+	virtual ~GameObject() = default;
 
 protected:
 	sf::RectangleShape m_rect;
